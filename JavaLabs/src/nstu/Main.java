@@ -1,14 +1,8 @@
 package nstu;
 
-import javax.swing.*;
-import java.awt.*;
-import java.util.Random;
-
 public class Main {
+
     public static void main(String[] args) {
-        Habitat habitat = new Habitat(700, 700);
-        habitat.addComponent();
-
+        new MyFrame();
     }
-
 }
