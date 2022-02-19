@@ -6,7 +6,7 @@ import java.awt.*;
 class MyPanel extends JPanel {
     MyPanel(int x, int y){
         setPreferredSize(new Dimension(x, y));
-        setLayout(new FlowLayout(FlowLayout.CENTER));
+        setLayout(new FlowLayout(FlowLayout.LEFT));
     }
     @Override
     protected void paintComponent(Graphics g){

@@ -31,17 +31,19 @@ public class MyFrame extends JFrame {
         scene.setLayout(new BorderLayout());
 
         MyPanel panel = new MyPanel(h.WIDTH, h.HEIGHT);
-        scene.add(panel, BorderLayout.CENTER);
+        scene.add(panel);
 
         JLabel timeLabel = new JLabel();
         timeLabel.setText("Time: " + timeS + " s");
-        timeLabel.setFont(new Font("JavaLabs/fonts/ttf/JetBrainsMono-Regular.ttf", Font.BOLD, 20));
+        timeLabel.setFont(new Font("JavaLabs/fonts/ttf/JetBrainsMono-Regular.ttf", Font.BOLD, 16));
+        timeLabel.setForeground(Color.RED);
         timeLabel.setVisible(false);
         panel.add(timeLabel);
 
 
         JLabel stats = new JLabel();
         stats.setFont(new Font("JavaLabs/fonts/ttf/JetBrainsMono-Regular.ttf", Font.ITALIC, 20));
+        stats.setForeground(Color.BLUE);
         stats.setLocation(0,0);
         stats.setVisible(false);
         panel.add(stats);
