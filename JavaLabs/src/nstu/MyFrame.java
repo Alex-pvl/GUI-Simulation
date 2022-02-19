@@ -8,6 +8,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class MyFrame extends JFrame {
+    boolean willShowTime = false;
     Habitat h = new Habitat();
     Timer timer = new Timer();
     long time = 0;
@@ -18,23 +19,41 @@ public class MyFrame extends JFrame {
         setIconImage(new ImageIcon("JavaLabs/src/nstu/imgs/icon.png").getImage());
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         Dimension dimension = toolkit.getScreenSize();
-        setFocusable(true);
         setBounds(dimension.width/2 - h.WIDTH/2, dimension.height/2 - h.HEIGHT/2, h.WIDTH, h.HEIGHT);
-        class MyTimerTask extends TimerTask {
-            @Override
-            public void run() {
-                System.out.println("time = " + time);
-                h.update(time);
-                start();
-                repaint();
-                time++;
-            }
-        }
-        timer.schedule(new MyTimerTask(), 0 ,1000);
+        timer.schedule(new MyTimerTask(), 100 ,1000);
         setVisible(true);
     }
 
-    public void start() {
+    // параметр для таймера
+    class MyTimerTask extends TimerTask {
+        @Override
+        public void run() {
+            System.out.println("time = " + time);
+            drawVehicles();
+            h.update(time);
+            showTimer();
+            repaint();
+            setVisible(true);
+            time++;
+            repaint();
+        }
+    }
+
+    public void showTimer() {
+        add(new JComponent() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                String timeS = "Time: " + (time-1) + " s";
+                Font font = new Font("JavaLabs/fonts/ttf/JetBrainsMono-Regular.ttf", Font.BOLD, 15);
+                g.setFont(font);
+                g.setColor(Color.BLACK);
+                g.drawString(timeS, 2, 15);
+                setVisible(true);
+            }
+        });
+    }
+
+    public void drawVehicles() {
         add(new JComponent() {
             @Override
             protected void paintComponent(Graphics g){

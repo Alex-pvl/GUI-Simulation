@@ -24,13 +24,13 @@ public class Habitat {
 
     public void update(long time) {
         if (random.nextInt(100) < P1 && time % N1 == 0) {
-            Car car = new Car(random.nextInt(WIDTH-250), random.nextInt(HEIGHT-68));
+            Car car = new Car(random.nextInt(WIDTH-150), random.nextInt(HEIGHT-98));
             vehicles.add(car);
             System.out.println("+car{" + car.getX() + "; " + car.getY() + "}");
             carCount++;
         }
         if (random.nextInt(100) < P2 && time % N2 == 0) {
-            Motorbike motorbike = new Motorbike(random.nextInt(WIDTH-200), random.nextInt(HEIGHT-84));
+            Motorbike motorbike = new Motorbike(random.nextInt(WIDTH-100), random.nextInt(HEIGHT-114));
             vehicles.add(motorbike);
             System.out.println("+motorbike{" + motorbike.getX() + "; " + motorbike.getY() + "}");
             motoCount++;
