@@ -26,23 +26,25 @@ public class MyFrame extends JFrame {
         setBounds(dimension.width/2 - h.WIDTH/2, dimension.height/2 - h.HEIGHT/2, h.WIDTH, h.HEIGHT);
         setFocusable(true);
 
+        JPanel scene = new JPanel();
+        add(scene);
+        scene.setLayout(new BorderLayout());
+
+        MyPanel panel = new MyPanel(h.WIDTH, h.HEIGHT);
+        scene.add(panel, BorderLayout.CENTER);
+
         JLabel timeLabel = new JLabel();
         timeLabel.setText("Time: " + timeS + " s");
-        timeLabel.setFont(new Font("JavaLabs/fonts/ttf/JetBrainsMono-Regular.ttf", Font.BOLD, 15));
-        timeLabel.setVerticalAlignment(JLabel.TOP);
-        timeLabel.setHorizontalAlignment(JLabel.CENTER);
-        timeLabel.setPreferredSize(new Dimension(10, 10));
-        timeLabel.setBackground(Color.BLACK);
+        timeLabel.setFont(new Font("JavaLabs/fonts/ttf/JetBrainsMono-Regular.ttf", Font.BOLD, 20));
         timeLabel.setVisible(false);
-        add(timeLabel);
+        panel.add(timeLabel);
+
 
         JLabel stats = new JLabel();
         stats.setFont(new Font("JavaLabs/fonts/ttf/JetBrainsMono-Regular.ttf", Font.ITALIC, 20));
-        stats.setVerticalAlignment(JLabel.CENTER);
-        stats.setHorizontalAlignment(JLabel.CENTER);
-        stats.setPreferredSize(new Dimension(100, 100));
-        stats.setBackground(Color.RED);
-        add(stats);
+        stats.setLocation(0,0);
+        stats.setVisible(false);
+        panel.add(stats);
 
         class MyTimerTask extends TimerTask {
             private Habitat habitat;
@@ -57,17 +59,14 @@ public class MyFrame extends JFrame {
             public void run() {
                 timeS.set(timeS.get()+1);
                 System.out.println("time = " + time);
+                drawVehicles();
                 habitat.update(time);
                 time++;
-                drawVehicles();
                 timeLabel.setText("Time: " + timeS + " s");
             }
         }
 
-
-
-
-        this.addKeyListener(new KeyAdapter() {
+        addKeyListener(new KeyAdapter() {
             Timer timer;
             long time;
             MyTimerTask task = null;
@@ -83,7 +82,7 @@ public class MyFrame extends JFrame {
                                 willShowStats = false;
                             }
 
-                            //h.vehicles.clear();
+                            Habitat.vehicles.clear();
                             isStarted = true;
                             h.carCount = 0;
                             h.motoCount = 0;
@@ -105,10 +104,10 @@ public class MyFrame extends JFrame {
                                 willShowTime = false;
                             }
 
-                            stats.setText("<html><br>Simulation time: " + timeS + " s</br>" +
-                                    "<br>Total vehicles: " + h.vehicles.size() + "</br>" +
-                                    "<br>Cars number: " + h.carCount + "</br>" +
-                                    "<br>Motorbikes number: " + h.motoCount + "</br></html>");
+                            stats.setText("<html>Simulation time: " + timeS + " s" +
+                                    "<br>Total vehicles: " + h.vehicles.size() +
+                                    "<br>Cars number: " + h.carCount +
+                                    "<br>Motorbikes number: " + h.motoCount);
                             stats.setVisible(true);
                             repaint();
                             willShowStats = true;
@@ -137,8 +136,10 @@ public class MyFrame extends JFrame {
         add(new JComponent() {
             @Override
             protected void paintComponent(Graphics g){
-                for (Vehicle v : h.vehicles) {
-                    g.drawImage(v.getImage().getImage(), v.getX(), v.getY(), null);
+                super.paintComponent(g);
+                for (int i = 0; i < Habitat.vehicles.size(); i++) {
+                    g.drawImage(Habitat.vehicles.get(i).getImage().getImage(), Habitat.vehicles.get(i).getX(),
+                            Habitat.vehicles.get(i).getY(), null);
                 }
             }
         });

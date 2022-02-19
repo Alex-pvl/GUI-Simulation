@@ -17,7 +17,7 @@ public class Habitat {
     int motoCount = 0;
     Random random = new Random();
 
-    List<Vehicle> vehicles = new ArrayList<>();
+    static List<Vehicle> vehicles = new ArrayList<>();
 
     public Habitat() {
     }
