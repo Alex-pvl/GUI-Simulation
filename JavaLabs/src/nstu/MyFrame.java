@@ -1,7 +1,5 @@
 package nstu;
 
-import nstu.vehicles.Vehicle;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
@@ -49,7 +47,7 @@ public class MyFrame extends JFrame {
         panel.add(stats);
 
         class MyTimerTask extends TimerTask {
-            private Habitat habitat;
+            private final Habitat habitat;
             private long time;
 
             public MyTimerTask(Habitat habitat, long time) {
@@ -60,7 +58,6 @@ public class MyFrame extends JFrame {
             @Override
             public void run() {
                 timeS.set(timeS.get()+1);
-                System.out.println("time = " + time);
                 drawVehicles();
                 habitat.update(time);
                 time++;
@@ -78,6 +75,7 @@ public class MyFrame extends JFrame {
                 switch (e.getKeyChar()) {
                     case 'b':
                         if (!isStarted) {
+                            System.out.println("---------------------------");
                             repaint();
                             if (willShowStats) {
                                 stats.setVisible(false);
@@ -107,7 +105,7 @@ public class MyFrame extends JFrame {
                             }
 
                             stats.setText("<html>Simulation time: " + timeS + " s" +
-                                    "<br>Total vehicles: " + h.vehicles.size() +
+                                    "<br>Total vehicles: " + Habitat.vehicles.size() +
                                     "<br>Cars number: " + h.carCount +
                                     "<br>Motorbikes number: " + h.motoCount);
                             stats.setVisible(true);
@@ -140,7 +138,7 @@ public class MyFrame extends JFrame {
             protected void paintComponent(Graphics g){
                 super.paintComponent(g);
                 for (int i = 0; i < Habitat.vehicles.size(); i++) {
-                    g.drawImage(Habitat.vehicles.get(i).getImage().getImage(), Habitat.vehicles.get(i).getX(),
+                    g.drawImage(Habitat.vehicles.get(i).getImg().getImage(), Habitat.vehicles.get(i).getX(),
                             Habitat.vehicles.get(i).getY(), null);
                 }
             }
