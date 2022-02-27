@@ -22,7 +22,7 @@ public abstract class Vehicle {
         this.y = y;
     }
 
-    public ImageIcon getImage() {
+    public ImageIcon getImg() {
         return image;
     }
 }
