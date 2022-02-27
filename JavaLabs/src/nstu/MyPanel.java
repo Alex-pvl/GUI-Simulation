@@ -1,19 +1,16 @@
 package nstu;
 
+import nstu.vehicles.Vehicle;
+
 import javax.swing.*;
 import java.awt.*;
 
 class MyPanel extends JPanel {
-    MyPanel(int x, int y){
-        setPreferredSize(new Dimension(x, y));
-        setLayout(new FlowLayout(FlowLayout.LEFT));
-    }
     @Override
     protected void paintComponent(Graphics g){
         super.paintComponent(g);
-        for (int i = 0; i < Habitat.vehicles.size(); i++) {
-            g.drawImage(Habitat.vehicles.get(i).getImg().getImage(), Habitat.vehicles.get(i).getX(),
-                    Habitat.vehicles.get(i).getY(), null);
+        for (Vehicle v : Habitat.vehicles) {
+            g.drawImage(v.getImage().getImage(), v.getX(), v.getY(), null);
         }
     }
 }
