@@ -19,9 +19,6 @@ public class Habitat {
 
     static List<Vehicle> vehicles = new ArrayList<>();
 
-    public Habitat() {
-    }
-
     public void update(long time) {
         if (random.nextInt(100) < P1 && time % N1 == 0) {
             Car car = new Car(random.nextInt(WIDTH-150), random.nextInt(HEIGHT-98));
