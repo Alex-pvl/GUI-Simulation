@@ -6,14 +6,13 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.atomic.AtomicLong;
 
 public class MyFrame extends JFrame {
-    boolean willShowStats = false;
+    boolean willShowStatsLabel = false;
     boolean willShowTime = false;
     boolean isStarted = false;
     Habitat h = new Habitat();
-    AtomicLong timeS = new AtomicLong(0);
+    long time;
 
     public MyFrame() {
         super("Road");
@@ -28,93 +27,82 @@ public class MyFrame extends JFrame {
         add(scene);
         scene.setLayout(new BorderLayout());
 
-        MyPanel panel = new MyPanel(h.WIDTH, h.HEIGHT);
+        MyPanel panel = new MyPanel();
+        panel.setPreferredSize(new Dimension(h.WIDTH, h.HEIGHT));
+        panel.setLayout(new FlowLayout(FlowLayout.LEFT));
         scene.add(panel);
 
         JLabel timeLabel = new JLabel();
-        timeLabel.setText("Time: " + timeS + " s");
+        timeLabel.setText("Time: " + 0 + " s");
         timeLabel.setFont(new Font("JavaLabs/fonts/ttf/JetBrainsMono-Regular.ttf", Font.BOLD, 16));
         timeLabel.setForeground(Color.RED);
         timeLabel.setVisible(false);
         panel.add(timeLabel);
 
-
-        JLabel stats = new JLabel();
-        stats.setFont(new Font("JavaLabs/fonts/ttf/JetBrainsMono-Regular.ttf", Font.ITALIC, 20));
-        stats.setForeground(Color.BLUE);
-        stats.setLocation(0,0);
-        stats.setVisible(false);
-        panel.add(stats);
+        JLabel statsLabel = new JLabel();
+        statsLabel.setFont(new Font("JavaLabs/fonts/ttf/JetBrainsMono-Regular.ttf", Font.ITALIC, 20));
+        statsLabel.setForeground(Color.BLUE);
+        statsLabel.setVisible(false);
+        panel.add(statsLabel);
 
         class MyTimerTask extends TimerTask {
-            private final Habitat habitat;
-            private long time;
-
-            public MyTimerTask(Habitat habitat, long time) {
-                this.habitat = habitat;
-                this.time = time;
-            }
-
             @Override
             public void run() {
-                timeS.set(timeS.get()+1);
                 drawVehicles();
-                habitat.update(time);
+                h.update(time);
                 time++;
-                timeLabel.setText("Time: " + timeS + " s");
+                timeLabel.setText("<html><p>Time: " + time + " s</html>");
             }
         }
 
         addKeyListener(new KeyAdapter() {
             Timer timer;
-            long time;
             MyTimerTask task = null;
 
             @Override
             public void keyPressed(KeyEvent e) {
                 switch (e.getKeyChar()) {
-                    case 'b':
+                    case 'B' -> {
                         if (!isStarted) {
                             System.out.println("---------------------------");
                             repaint();
-                            if (willShowStats) {
-                                stats.setVisible(false);
-                                willShowStats = false;
+                            if (willShowStatsLabel) {
+                                statsLabel.setVisible(false);
+                                willShowStatsLabel = false;
                             }
-
                             Habitat.vehicles.clear();
                             isStarted = true;
                             h.carCount = 0;
                             h.motoCount = 0;
                             timer = new Timer();
                             time = 0;
-                            timeS.set(0);
-                            task = new MyTimerTask(h, time);
+                            task = new MyTimerTask();
                             timer.schedule(task, 0, 1000);
                         }
-                        break;
-                    case 'e':
+                    }
+                    case 'E' -> {
                         if (isStarted) {
                             timer.cancel();
                             isStarted = false;
                         }
-                        if(!willShowStats) {
+                        if (!willShowStatsLabel) {
                             if (willShowTime) {
                                 timeLabel.setVisible(false);
                                 willShowTime = false;
                             }
-
-                            stats.setText("<html>Simulation time: " + timeS + " s" +
-                                    "<br>Total vehicles: " + Habitat.vehicles.size() +
-                                    "<br>Cars number: " + h.carCount +
-                                    "<br>Motorbikes number: " + h.motoCount);
-                            stats.setVisible(true);
+                            statsLabel.setText("<html>" +
+                                    "<p>Simulation time: " + time + " s" +
+                                    "<p>Total vehicles: " + Habitat.vehicles.size() +
+                                    "<p>Cars number: " + h.carCount +
+                                    "<p>Motorbikes number: " + h.motoCount
+                                    + "</html>");
+                            statsLabel.setVisible(true);
                             repaint();
-                            willShowStats = true;
+                            willShowStatsLabel = true;
                         }
-                        break;
-                    case 't':
-                        if (!willShowStats) {
+                    }
+                    case 'T' -> {
+                        if (!willShowStatsLabel) {
                             if (!willShowTime) {
                                 timeLabel.setVisible(true);
                                 willShowTime = true;
@@ -123,8 +111,8 @@ public class MyFrame extends JFrame {
                                 willShowTime = false;
                             }
                         }
-                        break;
-                    default: break;
+                    }
+                    default -> {}
                 }
             }
         });
@@ -138,7 +126,7 @@ public class MyFrame extends JFrame {
             protected void paintComponent(Graphics g){
                 super.paintComponent(g);
                 for (int i = 0; i < Habitat.vehicles.size(); i++) {
-                    g.drawImage(Habitat.vehicles.get(i).getImg().getImage(), Habitat.vehicles.get(i).getX(),
+                    g.drawImage(Habitat.vehicles.get(i).getImage().getImage(), Habitat.vehicles.get(i).getX(),
                             Habitat.vehicles.get(i).getY(), null);
                 }
             }
