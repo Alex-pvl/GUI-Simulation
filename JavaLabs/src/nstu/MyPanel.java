@@ -10,7 +10,7 @@ class MyPanel extends JPanel {
     protected void paintComponent(Graphics g){
         super.paintComponent(g);
         for (Vehicle v : Habitat.vehicles) {
-            g.drawImage(v.getImage().getImage(), v.getX(), v.getY(), null);
+            g.drawImage(v.getImg().getImage(), v.getX(), v.getY(), null);
         }
     }
 }

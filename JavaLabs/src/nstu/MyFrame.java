@@ -62,9 +62,11 @@ public class MyFrame extends JFrame {
             @Override
             public void keyPressed(KeyEvent e) {
                 switch (e.getKeyChar()) {
-                    case 'B' -> {
+                    case 'b' -> {
                         if (!isStarted) {
                             System.out.println("---------------------------");
+                            System.out.println("Car: chance - " + h.P1 + "%, time - " + h.N1 +
+                                            "\nBike: chance - " + h.P2 + "%, time - " + h.N2);
                             repaint();
                             if (willShowStatsLabel) {
                                 statsLabel.setVisible(false);
@@ -80,7 +82,7 @@ public class MyFrame extends JFrame {
                             timer.schedule(task, 0, 1000);
                         }
                     }
-                    case 'E' -> {
+                    case 'e' -> {
                         if (isStarted) {
                             timer.cancel();
                             isStarted = false;
@@ -101,7 +103,7 @@ public class MyFrame extends JFrame {
                             willShowStatsLabel = true;
                         }
                     }
-                    case 'T' -> {
+                    case 't' -> {
                         if (!willShowStatsLabel) {
                             if (!willShowTime) {
                                 timeLabel.setVisible(true);
@@ -126,7 +128,7 @@ public class MyFrame extends JFrame {
             protected void paintComponent(Graphics g){
                 super.paintComponent(g);
                 for (int i = 0; i < Habitat.vehicles.size(); i++) {
-                    g.drawImage(Habitat.vehicles.get(i).getImage().getImage(), Habitat.vehicles.get(i).getX(),
+                    g.drawImage(Habitat.vehicles.get(i).getImg().getImage(), Habitat.vehicles.get(i).getX(),
                             Habitat.vehicles.get(i).getY(), null);
                 }
             }
