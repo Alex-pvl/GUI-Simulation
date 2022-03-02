@@ -1,5 +1,7 @@
 package nstu;
 
+import nstu.vehicles.Vehicle;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
@@ -27,37 +29,25 @@ public class MyFrame extends JFrame {
         add(scene);
         scene.setLayout(new BorderLayout());
 
-        MyPanel panel = new MyPanel();
-        panel.setPreferredSize(new Dimension(h.WIDTH, h.HEIGHT));
-        panel.setLayout(new FlowLayout(FlowLayout.LEFT));
-        scene.add(panel);
+        MyPanel road = new MyPanel();
+        road.setLayout(new FlowLayout(FlowLayout.LEFT));
+        road.setBackground(Color.LIGHT_GRAY);
+        scene.add(road);
 
         JLabel timeLabel = new JLabel();
-        timeLabel.setText("Time: " + 0 + " s");
         timeLabel.setFont(new Font("JavaLabs/fonts/ttf/JetBrainsMono-Regular.ttf", Font.BOLD, 16));
         timeLabel.setForeground(Color.RED);
         timeLabel.setVisible(false);
-        panel.add(timeLabel);
+        road.add(timeLabel);
 
         JLabel statsLabel = new JLabel();
         statsLabel.setFont(new Font("JavaLabs/fonts/ttf/JetBrainsMono-Regular.ttf", Font.ITALIC, 20));
         statsLabel.setForeground(Color.BLUE);
         statsLabel.setVisible(false);
-        panel.add(statsLabel);
-
-        class MyTimerTask extends TimerTask {
-            @Override
-            public void run() {
-                drawVehicles();
-                h.update(time);
-                time++;
-                timeLabel.setText("<html><p>Time: " + time + " s</html>");
-            }
-        }
+        road.add(statsLabel);
 
         addKeyListener(new KeyAdapter() {
             Timer timer;
-            MyTimerTask task = null;
 
             @Override
             public void keyPressed(KeyEvent e) {
@@ -78,8 +68,15 @@ public class MyFrame extends JFrame {
                             h.motoCount = 0;
                             timer = new Timer();
                             time = 0;
-                            task = new MyTimerTask();
-                            timer.schedule(task, 0, 1000);
+                            timer.schedule(new TimerTask() {
+                                @Override
+                                public void run() {
+                                    drawVehicles();
+                                    h.update(time);
+                                    timeLabel.setText("<html><p>Time: " + time + " s</html>");
+                                    time++;
+                                }
+                            }, 0, 1000);
                         }
                     }
                     case 'e' -> {
@@ -96,10 +93,10 @@ public class MyFrame extends JFrame {
                                     "<p>Simulation time: " + time + " s" +
                                     "<p>Total vehicles: " + Habitat.vehicles.size() +
                                     "<p>Cars number: " + h.carCount +
-                                    "<p>Motorbikes number: " + h.motoCount
-                                    + "</html>");
+                                    "<p>Motorbikes number: " + h.motoCount +
+                                    "</html>"
+                            );
                             statsLabel.setVisible(true);
-                            repaint();
                             willShowStatsLabel = true;
                         }
                     }
@@ -127,9 +124,8 @@ public class MyFrame extends JFrame {
             @Override
             protected void paintComponent(Graphics g){
                 super.paintComponent(g);
-                for (int i = 0; i < Habitat.vehicles.size(); i++) {
-                    g.drawImage(Habitat.vehicles.get(i).getImg().getImage(), Habitat.vehicles.get(i).getX(),
-                            Habitat.vehicles.get(i).getY(), null);
+                for (Vehicle v : Habitat.vehicles) {
+                    g.drawImage(v.getImg().getImage(), v.getX(), v.getY(), null);
                 }
             }
         });
