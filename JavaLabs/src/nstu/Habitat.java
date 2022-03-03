@@ -4,6 +4,7 @@ import nstu.vehicles.Car;
 import nstu.vehicles.Motorbike;
 import nstu.vehicles.Vehicle;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;

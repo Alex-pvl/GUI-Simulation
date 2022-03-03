@@ -1,7 +1,5 @@
 package nstu;
 
-import nstu.vehicles.Vehicle;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
@@ -25,6 +23,7 @@ public class MyFrame extends JFrame {
         setBounds(dimension.width/2 - h.WIDTH/2, dimension.height/2 - h.HEIGHT/2, h.WIDTH, h.HEIGHT);
         setFocusable(true);
 
+        setResizable(false);
         JPanel scene = new JPanel();
         add(scene);
         scene.setLayout(new BorderLayout());
@@ -62,7 +61,7 @@ public class MyFrame extends JFrame {
                                 statsLabel.setVisible(false);
                                 willShowStatsLabel = false;
                             }
-                            Habitat.vehicles.clear();
+
                             isStarted = true;
                             h.carCount = 0;
                             h.motoCount = 0;
@@ -71,9 +70,9 @@ public class MyFrame extends JFrame {
                             timer.schedule(new TimerTask() {
                                 @Override
                                 public void run() {
-                                    drawVehicles();
                                     h.update(time);
                                     timeLabel.setText("<html><p>Time: " + time + " s</html>");
+                                    add(new JComponent() {});
                                     time++;
                                 }
                             }, 0, 1000);
@@ -98,6 +97,7 @@ public class MyFrame extends JFrame {
                             );
                             statsLabel.setVisible(true);
                             willShowStatsLabel = true;
+                            Habitat.vehicles.clear();
                         }
                     }
                     case 't' -> {
@@ -117,17 +117,5 @@ public class MyFrame extends JFrame {
         });
 
         setVisible(true);
-    }
-
-    public void drawVehicles() {
-        add(new JComponent() {
-            @Override
-            protected void paintComponent(Graphics g){
-                super.paintComponent(g);
-                for (Vehicle v : Habitat.vehicles) {
-                    g.drawImage(v.getImg().getImage(), v.getX(), v.getY(), null);
-                }
-            }
-        });
     }
 }

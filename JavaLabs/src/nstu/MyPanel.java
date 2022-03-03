@@ -13,4 +13,5 @@ class MyPanel extends JPanel {
             g.drawImage(v.getImg().getImage(), v.getX(), v.getY(), null);
         }
     }
+
 }
