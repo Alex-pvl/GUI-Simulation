@@ -4,7 +4,6 @@ import nstu.vehicles.Car;
 import nstu.vehicles.Motorbike;
 import nstu.vehicles.Vehicle;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -20,15 +19,15 @@ public class Habitat {
 
     static List<Vehicle> vehicles = new ArrayList<>();
 
-    public void update(long time) {
-        if (random.nextInt(100) < P1 && time % N1 == 0) {
-            Car car = new Car(random.nextInt(WIDTH-150), random.nextInt(HEIGHT-98));
+    public void update(double time) {
+        if (random.nextInt(100) < P1 && (int) time % N1 == 0) {
+            Car car = new Car(random.nextInt(WIDTH-500), random.nextInt(HEIGHT-98));
             vehicles.add(car);
             System.out.println("+car{" + car.getX() + "; " + car.getY() + "}");
             carCount++;
         }
-        if (random.nextInt(100) < P2 && time % N2 == 0) {
-            Motorbike motorbike = new Motorbike(random.nextInt(WIDTH-100), random.nextInt(HEIGHT-114));
+        if (random.nextInt(100) < P2 && (int) time % N2 == 0) {
+            Motorbike motorbike = new Motorbike(random.nextInt(WIDTH-450), random.nextInt(HEIGHT-114));
             vehicles.add(motorbike);
             System.out.println("+motorbike{" + motorbike.getX() + "; " + motorbike.getY() + "}");
             motoCount++;
