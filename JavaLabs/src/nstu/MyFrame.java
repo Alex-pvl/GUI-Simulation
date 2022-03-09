@@ -18,6 +18,7 @@ public class MyFrame extends JFrame {
     JLabel statsLabel;
     JButton start;
     JButton stop;
+    JCheckBox showTimer;
 
     public void startSimulation() {
         if (!isStarted) {
@@ -45,7 +46,7 @@ public class MyFrame extends JFrame {
                     h.update(time);
                     add(new JComponent(){});
                     time++;
-                    timeLabel.setText("Time: " + time + " s");
+                    timeLabel.setText("Время: " + time + " с");
                     repaint();
                 }
             }, 0, 1000);
@@ -64,10 +65,10 @@ public class MyFrame extends JFrame {
                 willShowTime = false;
             }
             statsLabel.setText("<html>" +
-                    "<p>Simulation time: " + time + " s" +
-                    "<p>Total vehicles: " + Habitat.vehicles.size() +
-                    "<p>Cars number: " + h.carCount +
-                    "<p>Motorbikes number: " + h.motoCount +
+                    "<p>Время симуляции: " + time + " c" +
+                    "<p>Всего объектов: " + Habitat.vehicles.size() +
+                    "<p>Число машин: " + h.carCount +
+                    "<p>Число мотоциклов: " + h.motoCount +
                     "</html>"
             );
             statsLabel.setVisible(true);
@@ -112,7 +113,7 @@ public class MyFrame extends JFrame {
         road.setBackground(Color.LIGHT_GRAY);
         scene.add(road);
 
-        timeLabel = new JLabel("Time: 0 s");
+        timeLabel = new JLabel("Время: 0 с");
         timeLabel.setFont(new Font("JetBrains Mono", Font.BOLD, 16));
         timeLabel.setForeground(Color.RED);
         timeLabel.setVisible(false);
@@ -127,7 +128,7 @@ public class MyFrame extends JFrame {
         JPanel panel = new JPanel();
         panel.setPreferredSize(new Dimension(350, h.HEIGHT));
         panel.setLayout(new FlowLayout(FlowLayout.CENTER));
-        panel.setBackground(Color.DARK_GRAY);
+        panel.setBackground(Color.GRAY);
         scene.add(panel, BorderLayout.EAST);
 
         addKeyListener(new KeyAdapter() {
@@ -149,6 +150,7 @@ public class MyFrame extends JFrame {
         start.setFont(new Font("JetBrains Mono", Font.BOLD, 16));
         start.addActionListener(e -> startSimulation());
         start.setFocusable(false);
+        start.setContentAreaFilled(true);
         panel.add(start);
 
         stop = new JButton("Стоп");
@@ -160,9 +162,14 @@ public class MyFrame extends JFrame {
         stop.setFont(new Font("JetBrains Mono", Font.BOLD, 16));
         stop.setFocusable(false);
         panel.add(stop);
-
-        start.setContentAreaFilled(true);
         stop.setContentAreaFilled(false);
+
+        showTimer = new JCheckBox("Показывать время симуляции");
+        showTimer.setFont(new Font("JetBrains Mono", Font.BOLD, 14));
+        showTimer.setBackground(panel.getBackground());
+        showTimer.addActionListener(e -> getTimer());
+        showTimer.setFocusable(false);
+        panel.add(showTimer);
 
         setVisible(true);
     }
