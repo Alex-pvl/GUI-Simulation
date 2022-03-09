@@ -19,6 +19,8 @@ public class MyFrame extends JFrame {
     JButton start;
     JButton stop;
     JCheckBox showTimer;
+    JCheckBox hideTimer;
+//    JOptionPane stopOrContinue;
 
     public void startSimulation() {
         if (!isStarted) {
@@ -91,6 +93,8 @@ public class MyFrame extends JFrame {
                 willShowTime = false;
             }
         }
+        showTimer.setSelected(willShowTime);
+        hideTimer.setSelected(!willShowTime);
     }
 
     public MyFrame() {
@@ -170,6 +174,27 @@ public class MyFrame extends JFrame {
         showTimer.addActionListener(e -> getTimer());
         showTimer.setFocusable(false);
         panel.add(showTimer);
+
+        hideTimer = new JCheckBox("Скрывать время симуляции");
+        hideTimer.setFont(new Font("JetBrains Mono", Font.BOLD, 14));
+        hideTimer.setBackground(panel.getBackground());
+        hideTimer.addActionListener(e -> getTimer());
+        hideTimer.setFocusable(false);
+        panel.add(hideTimer);
+
+        //JOptionPane pane = new JOptionPane();
+        //JOptionPane.showConfirmDialog(scene, "Завершить симуляцию?", "Завершение...", JOptionPane.OK_CANCEL_OPTION);
+
+
+
+
+
+
+
+
+
+
+
 
         setVisible(true);
     }
