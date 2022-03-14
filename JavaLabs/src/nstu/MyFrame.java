@@ -2,8 +2,7 @@ package nstu;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -18,8 +17,12 @@ public class MyFrame extends JFrame {
     JLabel statsLabel;
     JButton start;
     JButton stop;
-    JCheckBox showTimer;
-    JCheckBox hideTimer;
+    JCheckBox showInfo;
+    JRadioButton showTimer;
+    JRadioButton hideTimer;
+    JOptionPane pane;
+    JComboBox carProbability;
+
 //    JOptionPane stopOrContinue;
 
     public void startSimulation() {
@@ -56,30 +59,49 @@ public class MyFrame extends JFrame {
     }
 
     public void stopSimulation() {
-        if (isStarted) {
-            stop.setEnabled(true);
-            timer.cancel();
-            isStarted = false;
-        }
-        if (!willShowStatsLabel) {
-            if (willShowTime) {
-                timeLabel.setVisible(false);
-                willShowTime = false;
+        timer.cancel();
+        pane = new JOptionPane();
+        int n = JOptionPane.showConfirmDialog(this, "Завершить симуляцию?", "Завершение...", JOptionPane.OK_CANCEL_OPTION);
+        if (n == JOptionPane.YES_OPTION) {
+            showTimer.setSelected(false);
+            hideTimer.setSelected(false);
+            if (isStarted) {
+                stop.setEnabled(true);
+                timer.cancel();
+                isStarted = false;
             }
-            statsLabel.setText("<html>" +
-                    "<p>Время симуляции: " + time + " c" +
-                    "<p>Всего объектов: " + Habitat.vehicles.size() +
-                    "<p>Число машин: " + h.carCount +
-                    "<p>Число мотоциклов: " + h.motoCount +
-                    "</html>"
-            );
-            statsLabel.setVisible(true);
-            willShowStatsLabel = true;
-            Habitat.vehicles.clear();
-            start.setEnabled(true);
-            stop.setEnabled(false);
-            start.setContentAreaFilled(true);
-            stop.setContentAreaFilled(false);
+            if (!willShowStatsLabel) {
+                if (willShowTime) {
+                    timeLabel.setVisible(false);
+                    willShowTime = false;
+                }
+                statsLabel.setText("<html>" +
+                        "<p>Время симуляции: " + time + " c" +
+                        "<p>Всего объектов: " + Habitat.vehicles.size() +
+                        "<p>Число машин: " + h.carCount +
+                        "<p>Число мотоциклов: " + h.motoCount +
+                        "</html>"
+                );
+                statsLabel.setVisible(true);
+                willShowStatsLabel = true;
+                Habitat.vehicles.clear();
+                start.setEnabled(true);
+                stop.setEnabled(false);
+                start.setContentAreaFilled(true);
+                stop.setContentAreaFilled(false);
+            }
+        } else {
+            timer = new Timer();
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    h.update(time);
+                    add(new JComponent(){});
+                    time++;
+                    timeLabel.setText("Время: " + time + " с");
+                    repaint();
+                }
+            }, 0, 1000);
         }
     }
 
@@ -88,13 +110,17 @@ public class MyFrame extends JFrame {
             if (!willShowTime) {
                 timeLabel.setVisible(true);
                 willShowTime = true;
+                showTimer.setSelected(true);
+                hideTimer.setSelected(false);
             } else {
                 timeLabel.setVisible(false);
                 willShowTime = false;
+                hideTimer.setSelected(true);
+                showTimer.setSelected(false);
             }
         }
-        showTimer.setSelected(willShowTime);
-        hideTimer.setSelected(!willShowTime);
+
+
     }
 
     public MyFrame() {
@@ -114,7 +140,7 @@ public class MyFrame extends JFrame {
         MyPanel road = new MyPanel();
         road.setBounds(0, 0, h.WIDTH-350, h.HEIGHT);
         road.setLayout(new FlowLayout(FlowLayout.LEFT));
-        road.setBackground(Color.LIGHT_GRAY);
+        road.setBackground(new Color(113, 200, 0));
         scene.add(road);
 
         timeLabel = new JLabel("Время: 0 с");
@@ -130,9 +156,15 @@ public class MyFrame extends JFrame {
         road.add(statsLabel);
 
         JPanel panel = new JPanel();
-        panel.setPreferredSize(new Dimension(350, h.HEIGHT));
+        panel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                requestFocusInWindow();
+            }
+        });
+        panel.setPreferredSize(new Dimension(280, h.HEIGHT));
         panel.setLayout(new FlowLayout(FlowLayout.CENTER));
-        panel.setBackground(Color.GRAY);
+        panel.setBackground(new Color(22,169,173));
         scene.add(panel, BorderLayout.EAST);
 
         addKeyListener(new KeyAdapter() {
@@ -168,22 +200,69 @@ public class MyFrame extends JFrame {
         panel.add(stop);
         stop.setContentAreaFilled(false);
 
-        showTimer = new JCheckBox("Показывать время симуляции");
+        showInfo = new JCheckBox("Показывать информацию");
+        showInfo.setFont(new Font("JetBrains Mono", Font.BOLD, 14));
+        showInfo.setBackground(panel.getBackground());
+        showInfo.setFocusable(false);
+        panel.add(showInfo);
+
+        showTimer = new JRadioButton("Показывать время симуляции");
         showTimer.setFont(new Font("JetBrains Mono", Font.BOLD, 14));
         showTimer.setBackground(panel.getBackground());
         showTimer.addActionListener(e -> getTimer());
         showTimer.setFocusable(false);
         panel.add(showTimer);
 
-        hideTimer = new JCheckBox("Скрывать время симуляции");
+        hideTimer = new JRadioButton("Скрывать время симуляции");
         hideTimer.setFont(new Font("JetBrains Mono", Font.BOLD, 14));
         hideTimer.setBackground(panel.getBackground());
         hideTimer.addActionListener(e -> getTimer());
         hideTimer.setFocusable(false);
         panel.add(hideTimer);
 
-        //JOptionPane pane = new JOptionPane();
-        //JOptionPane.showConfirmDialog(scene, "Завершить симуляцию?", "Завершение...", JOptionPane.OK_CANCEL_OPTION);
+
+        JButton submit = new JButton("Ок");
+        submit.setPreferredSize(new Dimension(50,15));
+        JLabel carsFreq = new JLabel("Частота появления машин");
+        JTextField carsFreqText = new JTextField("" + h.N1,3);
+        carsFreq.setFont(new Font("JetBrains Mono", Font.BOLD, 12));
+        carsFreqText.setFont(new Font("JetBrains Mono", Font.BOLD, 12));
+
+        panel.add(submit);
+        panel.add(carsFreq);
+        panel.add(carsFreqText);
+
+
+        String[] carProb = {
+                "0%",
+                "10%",
+                "20%",
+                "30%",
+                "40%",
+                "50%",
+                "60%",
+                "70%",
+                "80%",
+                "90%",
+                "100%",
+        };
+
+        JLabel carsP = new JLabel("Вероятность рождения машин");
+        carsP.setFont(new Font("JetBrains Mono", Font.BOLD, 12));
+        panel.add(carsP);
+        carProbability = new JComboBox(carProb);
+        carProbability.setSelectedItem("" + h.P1 + "%");
+        panel.add(carProbability, BorderLayout.SOUTH);
+
+        carProbability.addActionListener(e -> {
+            if (e.getSource() == carProbability) {
+                String prb = carProbability.getSelectedItem().toString().replace("%", "");
+                h.P1 = Integer.parseInt(prb);
+            }
+        });
+        carProbability.setFocusable(false);
+
+
 
 
 

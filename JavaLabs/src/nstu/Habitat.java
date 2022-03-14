@@ -11,8 +11,8 @@ import java.util.Random;
 public class Habitat {
     final int WIDTH = 1200;
     final int HEIGHT = 750;
-    final int N1 = 3, N2 = 4;
-    final int P1 = 70, P2 = 60;
+    int N1 = 3, N2 = 4;
+    int P1 = 60, P2 = 60;
     int carCount = 0;
     int motoCount = 0;
     Random random = new Random();
