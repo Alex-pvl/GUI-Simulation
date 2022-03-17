@@ -30,10 +30,18 @@ public class MyFrame extends JFrame {
     JComboBox<String> carProbability;
     JList<String> motoProbability;
 
+    JMenuItem startItem;
+    JMenuItem stopItem;
+    JMenuItem showInfoItem;
+    JMenuItem showTimerItem;
+    JMenuItem hideTimerItem;
+
     public void startSimulation() {
         if (!isStarted) {
             start.setEnabled(false);
+            startItem.setEnabled(false);
             stop.setEnabled(true);
+            stopItem.setEnabled(true);
             start.setContentAreaFilled(false);
             stop.setContentAreaFilled(true);
             System.out.println("---------------------------");
@@ -72,17 +80,22 @@ public class MyFrame extends JFrame {
         stats.setFont(new Font("JetBrains Mono", Font.BOLD, 16));
 
         int n;
-        if (showInfo.isSelected()) {
+        if (showInfo.isSelected() || showInfoItem.isSelected()) {
+            showInfoItem.setSelected(true);
             n = JOptionPane.showConfirmDialog(this, stats, "Информация", JOptionPane.OK_CANCEL_OPTION);
         } else {
+            showInfoItem.setSelected(false);
             n = JOptionPane.showConfirmDialog(this, "Завершить симуляцию?", "Завершение...", JOptionPane.OK_CANCEL_OPTION);
         }
 
         if (n == JOptionPane.YES_OPTION) {
             showTimer.setSelected(false);
+            showTimerItem.setSelected(false);
             hideTimer.setSelected(false);
+            hideTimerItem.setSelected(false);
             if (isStarted) {
                 stop.setEnabled(true);
+                stopItem.setEnabled(true);
                 timer.cancel();
                 isStarted = false;
             }
@@ -94,7 +107,9 @@ public class MyFrame extends JFrame {
 
             Habitat.vehicles.clear();
             start.setEnabled(true);
+            startItem.setEnabled(true);
             stop.setEnabled(false);
+            stopItem.setEnabled(false);
             start.setContentAreaFilled(true);
             stop.setContentAreaFilled(false);
 
@@ -104,7 +119,8 @@ public class MyFrame extends JFrame {
                 @Override
                 public void run() {
                     h.update(time);
-                    add(new JComponent(){});
+                    add(new JComponent() {
+                    });
                     time++;
                     timeLabel.setText("Время: " + time + " с");
                     repaint();
@@ -119,17 +135,22 @@ public class MyFrame extends JFrame {
             timeLabel.setVisible(true);
             willShowTime = true;
             showTimer.setSelected(true);
+            showTimerItem.setSelected(true);
             hideTimer.setSelected(false);
+            hideTimerItem.setSelected(false);
         } else {
             timeLabel.setVisible(false);
             willShowTime = false;
             hideTimer.setSelected(true);
+            hideTimerItem.setSelected(true);
             showTimer.setSelected(false);
+            showTimerItem.setSelected(false);
         }
     }
 
+
     public MyFrame() {
-        super("Road");
+        super("Дорога");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setIconImage(new ImageIcon("JavaLabs/src/nstu/imgs/icon.png").getImage());
         setBounds(dimension.width / 2 - h.WIDTH / 2, dimension.height / 2 - h.HEIGHT / 2, h.WIDTH, h.HEIGHT);
@@ -143,7 +164,7 @@ public class MyFrame extends JFrame {
         MyPanel road = new MyPanel();
         road.setBounds(0, 0, h.WIDTH - 350, h.HEIGHT);
         road.setLayout(new FlowLayout(FlowLayout.LEFT));
-        road.setBackground(new Color(113, 200, 0));
+        road.setBackground(Color.WHITE);
         scene.add(road);
 
         timeLabel = new JLabel("Время: 0 с");
@@ -162,7 +183,7 @@ public class MyFrame extends JFrame {
         });
         panel.setPreferredSize(new Dimension(290, h.HEIGHT));
         panel.setLayout(new FlowLayout(FlowLayout.CENTER));
-        panel.setBackground(new Color(22, 169, 173));
+        panel.setBackground(Color.LIGHT_GRAY);
         scene.add(panel, BorderLayout.EAST);
 
         addKeyListener(new KeyAdapter() {
@@ -180,7 +201,7 @@ public class MyFrame extends JFrame {
 
         start = new JButton("Старт");
         start.setBorderPainted(false);
-        start.setBackground(Color.green);
+        start.setBackground(Color.GREEN);
         start.setPreferredSize(new Dimension(100, 30));
         start.setFont(new Font("JetBrains Mono", Font.BOLD, 16));
         start.addActionListener(e -> startSimulation());
@@ -190,7 +211,7 @@ public class MyFrame extends JFrame {
 
         stop = new JButton("Стоп");
         stop.setBorderPainted(false);
-        stop.setBackground(Color.red);
+        stop.setBackground(Color.RED);
         stop.addActionListener(e -> stopSimulation());
         stop.setEnabled(false);
         stop.setPreferredSize(new Dimension(100, 30));
@@ -202,6 +223,7 @@ public class MyFrame extends JFrame {
         showInfo = new JCheckBox("Показывать информацию");
         showInfo.setFont(new Font("JetBrains Mono", Font.BOLD, 14));
         showInfo.setBackground(panel.getBackground());
+        showInfo.addActionListener(e -> showInfoItem.setSelected(showInfo.isSelected()));
         showInfo.setFocusable(false);
         panel.add(showInfo);
 
@@ -311,6 +333,34 @@ public class MyFrame extends JFrame {
         motoProbability.setFocusable(false);
         panel.add(motoProbability);
 
+        JMenuBar menu = new JMenuBar();
+
+        JMenu simulationMenu = new JMenu("Симуляция");
+        startItem = new JMenuItem("Старт");
+        stopItem = new JMenuItem("Стоп");
+        showInfoItem = new JCheckBoxMenuItem("Показывать информацию");
+        startItem.addActionListener(e -> startSimulation());
+        stopItem.addActionListener(e -> stopSimulation());
+        stopItem.setEnabled(false);
+        showInfoItem.addActionListener(e -> showInfo.setSelected(showInfoItem.isSelected()));
+        simulationMenu.add(startItem);
+        simulationMenu.add(stopItem);
+        simulationMenu.add(showInfoItem);
+
+        JMenu timerMenu = new JMenu("Таймер");
+        showTimerItem = new JRadioButtonMenuItem("Показывать");
+        hideTimerItem = new JRadioButtonMenuItem("Скрывать");
+        showTimerItem.addActionListener(e -> getTimer());
+        hideTimerItem.addActionListener(e -> getTimer());
+        hideTimerItem.setSelected(true);
+        timerMenu.add(showTimerItem);
+        timerMenu.add(hideTimerItem);
+
+        menu.add(simulationMenu);
+        menu.add(timerMenu);
+
+        setJMenuBar(menu);
+        menu.setFocusable(false);
 
         setVisible(true);
     }
