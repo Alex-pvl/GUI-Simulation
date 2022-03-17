@@ -77,6 +77,7 @@ public class MyFrame extends JFrame {
                         "\nЧисло машин: " + h.carCount +
                         "\nЧисло мотоциклов: " + h.motoCount
         );
+        stats.setEditable(false);
         stats.setFont(new Font("JetBrains Mono", Font.BOLD, 16));
 
         int n;
