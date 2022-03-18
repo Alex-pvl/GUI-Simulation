@@ -12,12 +12,12 @@ public class Habitat {
     final int WIDTH = 1200;
     final int HEIGHT = 750;
     int N1 = 3, N2 = 4;
-    int P1 = 60, P2 = 60;
+    int P1 = 60, P2 = 70;
     int carCount = 0;
     int motoCount = 0;
     Random random = new Random();
 
-    static List<Vehicle> vehicles = new ArrayList<>();
+    final static List<Vehicle> vehicles = new ArrayList<>();
 
     public void update(double time) {
         if (random.nextInt(100) < P1 && (int) time % N1 == 0) {

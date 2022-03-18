@@ -22,7 +22,7 @@ public class MyFrame extends JFrame {
     JCheckBox showInfo;
     JRadioButton showTimer;
     JRadioButton hideTimer;
-    JOptionPane pane;
+    JOptionPane dialog;
     JButton submitCar;
     JButton submitMoto;
     JTextField carsFreqText;
@@ -70,13 +70,14 @@ public class MyFrame extends JFrame {
 
     public void stopSimulation() {
         timer.cancel();
-        pane = new JOptionPane();
+        dialog = new JOptionPane();
         JTextArea stats = new JTextArea(
                 "Время симуляции: " + time + " c" +
                         "\nВсего объектов: " + Habitat.vehicles.size() +
                         "\nЧисло машин: " + h.carCount +
                         "\nЧисло мотоциклов: " + h.motoCount
         );
+        stats.setBackground(dialog.getBackground());
         stats.setEditable(false);
         stats.setFont(new Font("JetBrains Mono", Font.BOLD, 16));
 
@@ -92,8 +93,8 @@ public class MyFrame extends JFrame {
         if (n == JOptionPane.YES_OPTION) {
             showTimer.setSelected(false);
             showTimerItem.setSelected(false);
-            hideTimer.setSelected(false);
-            hideTimerItem.setSelected(false);
+            hideTimer.setSelected(true);
+            hideTimerItem.setSelected(true);
             if (isStarted) {
                 stop.setEnabled(true);
                 stopItem.setEnabled(true);
@@ -194,15 +195,14 @@ public class MyFrame extends JFrame {
                     case 'b' -> startSimulation();
                     case 'e' -> stopSimulation();
                     case 't' -> getTimer();
-                    default -> {
-                    }
+                    default -> {}
                 }
             }
         });
 
         start = new JButton("Старт");
         start.setBorderPainted(false);
-        start.setBackground(Color.GREEN);
+        start.setBackground(new Color(0, 255, 119));
         start.setPreferredSize(new Dimension(100, 30));
         start.setFont(new Font("JetBrains Mono", Font.BOLD, 16));
         start.addActionListener(e -> startSimulation());
@@ -212,7 +212,7 @@ public class MyFrame extends JFrame {
 
         stop = new JButton("Стоп");
         stop.setBorderPainted(false);
-        stop.setBackground(Color.RED);
+        stop.setBackground(new Color(222, 33, 33));
         stop.addActionListener(e -> stopSimulation());
         stop.setEnabled(false);
         stop.setPreferredSize(new Dimension(100, 30));
@@ -254,7 +254,7 @@ public class MyFrame extends JFrame {
                 h.N1 = Integer.parseInt(carsFreqText.getText());
                 if (h.N1 <= 0) throw new Exception();
             } catch (Exception exp) {
-                JOptionPane.showMessageDialog(this, "Введите целое число!");
+                JOptionPane.showMessageDialog(this, "Введите целое положительое число!");
                 h.N1 = 3;
                 System.out.println("Поймано исключение " + exp.getMessage());
                 carsFreqText.setText("" + h.N1);
@@ -276,7 +276,7 @@ public class MyFrame extends JFrame {
                 h.N2 = Integer.parseInt(motoFreqText.getText());
                 if (h.N2 <= 0) throw new Exception();
             } catch (Exception exp) {
-                JOptionPane.showMessageDialog(this, "Введите целое число!");
+                JOptionPane.showMessageDialog(this, "Введите целое положительое число!");
                 h.N2 = 4;
                 System.out.println("Поймано исключение " + exp.getMessage());
                 motoFreqText.setText("" + h.N2);
