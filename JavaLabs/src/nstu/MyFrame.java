@@ -1,5 +1,9 @@
 package nstu;
 
+import nstu.vehicles.Car;
+import nstu.vehicles.Motorbike;
+import nstu.vehicles.Vehicle;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -8,33 +12,39 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class MyFrame extends JFrame {
-    Toolkit toolkit = Toolkit.getDefaultToolkit();
-    Dimension dimension = toolkit.getScreenSize();
-    boolean willShowTime = false;
-    boolean isStarted = false;
-    Habitat h = new Habitat();
-    long time;
-    Timer timer;
-    JPanel panel;
-    JLabel timeLabel;
-    JButton start;
-    JButton stop;
-    JCheckBox showInfo;
-    JRadioButton showTimer;
-    JRadioButton hideTimer;
-    JOptionPane dialog;
-    JButton submitCar;
-    JButton submitMoto;
-    JTextField carsFreqText;
-    JTextField motoFreqText;
-    JComboBox<String> carProbability;
-    JList<String> motoProbability;
+    public Toolkit toolkit = Toolkit.getDefaultToolkit();
+    public Dimension dimension = toolkit.getScreenSize();
+    public boolean willShowTime = false;
+    public boolean isStarted = false;
+    public Habitat h = new Habitat();
+    public long time;
+    public Timer timer;
+    public JPanel panel;
+    public JLabel timeLabel;
+    public JButton start;
+    public JButton stop;
+    public JCheckBox showInfo;
+    public JRadioButton showTimer;
+    public JRadioButton hideTimer;
+    public JOptionPane dialog;
+    public JButton submitCar;
+    public JButton submitMoto;
+    public JTextField carsFreqText;
+    public JTextField motoFreqText;
+    public JComboBox<String> carProbability;
+    public JList<String> motoProbability;
 
-    JMenuItem startItem;
-    JMenuItem stopItem;
-    JMenuItem showInfoItem;
-    JMenuItem showTimerItem;
-    JMenuItem hideTimerItem;
+    public JMenuItem startItem;
+    public JMenuItem stopItem;
+    public JMenuItem showInfoItem;
+    public JMenuItem showTimerItem;
+    public JMenuItem hideTimerItem;
+
+    public JButton submitCarTime;
+    public JButton submitMotoTime;
+    public JTextField carsTimeText;
+    public JTextField motoTimeText;
+    public JButton currentVehicles;
 
     public void startSimulation() {
         if (!isStarted) {
@@ -114,7 +124,7 @@ public class MyFrame extends JFrame {
             stopItem.setEnabled(false);
             start.setContentAreaFilled(true);
             stop.setContentAreaFilled(false);
-
+            repaint();
         } else {
             timer = new Timer();
             timer.schedule(new TimerTask() {
@@ -184,7 +194,7 @@ public class MyFrame extends JFrame {
             }
         });
         panel.setPreferredSize(new Dimension(290, h.HEIGHT));
-        panel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        panel.setLayout(new FlowLayout(FlowLayout.LEFT));
         panel.setBackground(Color.LIGHT_GRAY);
         scene.add(panel, BorderLayout.EAST);
 
@@ -203,7 +213,7 @@ public class MyFrame extends JFrame {
         start = new JButton("Старт");
         start.setBorderPainted(false);
         start.setBackground(new Color(0, 255, 119));
-        start.setPreferredSize(new Dimension(100, 30));
+        start.setPreferredSize(new Dimension(138, 30));
         start.setFont(new Font("JetBrains Mono", Font.BOLD, 16));
         start.addActionListener(e -> startSimulation());
         start.setFocusable(false);
@@ -215,7 +225,7 @@ public class MyFrame extends JFrame {
         stop.setBackground(new Color(222, 33, 33));
         stop.addActionListener(e -> stopSimulation());
         stop.setEnabled(false);
-        stop.setPreferredSize(new Dimension(100, 30));
+        stop.setPreferredSize(new Dimension(138, 30));
         stop.setFont(new Font("JetBrains Mono", Font.BOLD, 16));
         stop.setFocusable(false);
         panel.add(stop);
@@ -261,9 +271,9 @@ public class MyFrame extends JFrame {
             }
         });
         submitCar.setFocusable(false);
-        panel.add(submitCar);
         panel.add(carsFreq);
         panel.add(carsFreqText);
+        panel.add(submitCar);
 
         submitMoto = new JButton("Ок");
         submitMoto.setPreferredSize(new Dimension(50, 15));
@@ -283,9 +293,9 @@ public class MyFrame extends JFrame {
             }
         });
         submitMoto.setFocusable(false);
-        panel.add(submitMoto);
         panel.add(motoFreq);
         panel.add(motoFreqText);
+        panel.add(submitMoto);
 
         String[] prob = {
                 "0%",
@@ -362,6 +372,79 @@ public class MyFrame extends JFrame {
 
         setJMenuBar(menu);
         menu.setFocusable(false);
+
+        submitCarTime = new JButton("Ок");
+        submitCarTime.setPreferredSize(new Dimension(50, 15));
+        JLabel carsTime = new JLabel("Время жизни машин");
+        carsTimeText = new JTextField("" + Car.getTimeLifeCar(), 4);
+        carsTime.setFont(new Font("JetBrains Mono", Font.BOLD, 12));
+        carsTimeText.setFont(new Font("JetBrains Mono", Font.BOLD, 12));
+        submitCarTime.addActionListener(e -> {
+            try {
+                Car.setTimeLifeCar(Integer.parseInt(carsTimeText.getText()));
+                if (Car.getTimeLifeCar() <= 0) throw new Exception();
+            } catch (Exception exp) {
+                JOptionPane.showMessageDialog(this, "Введите целое положительое число!");
+                Car.setTimeLifeCar(10);
+                System.out.println("Поймано исключение " + exp.getMessage());
+                carsTimeText.setText("" + Car.getTimeLifeCar());
+            }
+        });
+        submitCarTime.setFocusable(false);
+        panel.add(carsTime);
+        panel.add(carsTimeText);
+        panel.add(submitCarTime);
+
+        submitMotoTime = new JButton("Ок");
+        submitMotoTime.setPreferredSize(new Dimension(50, 15));
+        JLabel motoTime = new JLabel("Время жизни мотоциклов");
+        motoTimeText = new JTextField("" + Motorbike.getTimeLifeMoto(), 4);
+        motoTime.setFont(new Font("JetBrains Mono", Font.BOLD, 12));
+        motoTimeText.setFont(new Font("JetBrains Mono", Font.BOLD, 12));
+        submitMotoTime.addActionListener(e -> {
+            try {
+                Motorbike.setTimeLifeMoto(Integer.parseInt(motoTimeText.getText()));
+                if (Motorbike.getTimeLifeMoto() <= 0) throw new Exception();
+            } catch (Exception exp) {
+                JOptionPane.showMessageDialog(this, "Введите целое положительое число!");
+                Motorbike.setTimeLifeMoto(8);
+                System.out.println("Поймано исключение " + exp.getMessage());
+                motoTimeText.setText("" + Motorbike.getTimeLifeMoto());
+            }
+        });
+        submitMotoTime.setFocusable(false);
+        panel.add(motoTime);
+        panel.add(motoTimeText);
+        panel.add(submitMotoTime);
+
+        currentVehicles = new JButton("Текущие объекты");
+        currentVehicles.setPreferredSize(new Dimension(280, 20));
+        currentVehicles.setBackground(new Color(79, 153, 192));
+        currentVehicles.addActionListener(e -> {
+            StringBuilder currentObjects = new StringBuilder();
+            for (int i = 0; i < Habitat.vehicles.size(); i++) {
+                Vehicle v = Habitat.vehicles.get(i);
+                if (v instanceof Car) {
+                    currentObjects.append(i + 1).
+                            append(". Машина\nВремя рождения: ").append(Habitat.times.get(v.getId())).
+                            append("\nУникальный идентификатор: ").append(v.getId()).append("\n\n");
+                } else {
+                    currentObjects.append(i + 1).
+                            append(". Мотоцикл\nВремя рождения: ").append(Habitat.times.get(v.getId())).
+                            append("\nУникальный идентификатор: ").append(v.getId()).append("\n\n");
+                }
+            }
+            if (currentObjects.length() == 0) {
+                JOptionPane.showMessageDialog(this, "Пусто!");
+            } else {
+                TextArea stats = new TextArea(currentObjects.toString());
+                stats.setEditable(false);
+                stats.setFont(new Font("JetBrains Mono", Font.BOLD, 14));
+                JOptionPane.showMessageDialog(this, stats, "Список текущих объектов", JOptionPane.INFORMATION_MESSAGE);
+            }
+        });
+        currentVehicles.setFocusable(false);
+        panel.add(currentVehicles);
 
         setVisible(true);
     }

@@ -3,24 +3,23 @@ package nstu.vehicles;
 import javax.swing.*;
 
 public abstract class Vehicle {
-    int x, y;
-    ImageIcon image;
+    public int x, y, id;
+    public long timeAppear;
+    public ImageIcon image;
 
     public int getX() {
         return x;
-    }
-
-    public void setX(int x) {
-        this.x = x;
     }
 
     public int getY() {
         return y;
     }
 
-    public void setY(int y) {
-        this.y = y;
-    }
+    public long getTimeAppear() {return timeAppear;}
+
+    public void setTimeAppear(long timeAppear) {this.timeAppear = timeAppear;}
+
+    public int getId() {return id;}
 
     public ImageIcon getImg() {
         return image;
