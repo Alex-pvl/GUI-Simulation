@@ -32,7 +32,7 @@ public class MotorbikeAI extends BaseAI {
 				}
 			}
 			try {
-				Thread.sleep(500);
+				Thread.sleep(10);
 			} catch (InterruptedException e) {
 				System.out.println("Поток прерван: " + e.getMessage());
 			}

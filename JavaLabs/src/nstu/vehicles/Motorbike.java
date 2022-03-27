@@ -12,7 +12,7 @@ public class Motorbike extends Vehicle implements IBehaviour {
 	private boolean bottomBorder = false;
 
 	public Motorbike(int x, int y) {
-		this.setImage(new ImageIcon("JavaLabs/src/nstu/imgs/moto.png"));
+		this.setImage(new ImageIcon("src/nstu/imgs/moto.png"));
 		this.setX(x);
 		this.setY(y);
 		int id = new Random().nextInt(2000000000) - 1000000000;

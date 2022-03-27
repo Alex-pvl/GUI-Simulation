@@ -17,6 +17,7 @@ public class MyFrame extends JFrame {
 	public Habitat h = new Habitat();
 	public long time;
 	public Timer timer;
+	public Timer timerRepaint;
 	public JPanel panel;
 	public JLabel timeLabel;
 	public JButton start;
@@ -44,6 +45,8 @@ public class MyFrame extends JFrame {
 	public JTextField motoTimeText;
 	public JButton currentVehicles;
 
+	public JButton carAI;
+	public JButton motoAI;
 	public CarAI carMoving;
 	public MotorbikeAI motoMoving;
 	public static boolean startCarMoving;
@@ -57,6 +60,8 @@ public class MyFrame extends JFrame {
 		if (!isStarted) {
 			startCarMoving = false;
 			startMotoMoving = false;
+			carAI.setEnabled(true);
+			motoAI.setEnabled(true);
 			carMoving.start();
 			motoMoving.start();
 			start.setEnabled(false);
@@ -78,14 +83,20 @@ public class MyFrame extends JFrame {
 			timer.schedule(new TimerTask() {
 				@Override
 				public void run() {
-					h.update(time);
-				  add(new JComponent() {
-					});
-					time++;
-					timeLabel.setText("Время: " + time + " с");
-					repaint();
+					time+=1;
+						h.update(time);
+						timeLabel.setText("Время: " + time + " с");
 				}
 			}, 0, 1000);
+			timerRepaint = new Timer();
+			timerRepaint.schedule(new TimerTask() {
+				@Override
+				public void run() {
+					repaint();
+					add(new JComponent() {
+					});
+				}
+			}, 0, 10);
 		}
 	}
 
@@ -116,6 +127,8 @@ public class MyFrame extends JFrame {
 			showTimerItem.setSelected(false);
 			hideTimer.setSelected(true);
 			hideTimerItem.setSelected(true);
+			carAI.setEnabled(false);
+			motoAI.setEnabled(false);
 			if (isStarted) {
 				stop.setEnabled(true);
 				stopItem.setEnabled(true);
@@ -176,7 +189,7 @@ public class MyFrame extends JFrame {
 	public MyFrame() {
 		super("Дорога");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setIconImage(new ImageIcon("JavaLabs/src/nstu/imgs/icon.png").getImage());
+		setIconImage(new ImageIcon("src/nstu/imgs/icon.png").getImage());
 		setBounds(dimension.width / 2 - Habitat.WIDTH / 2, dimension.height / 2 - Habitat.HEIGHT / 2,
 						Habitat.WIDTH, Habitat.HEIGHT);
 		setLayout(new BorderLayout());
@@ -463,9 +476,9 @@ public class MyFrame extends JFrame {
 		currentVehicles.setFocusable(false);
 		panel.add(currentVehicles);
 
-		JButton carAI = new JButton("Движение машин");
-		carAI.setFont(new Font("JetBrains Mono", Font.BOLD, 10));
-		carAI.setPreferredSize(new Dimension(138, 30));
+		carAI = new JButton("Движение машин");
+		carAI.setFont(new Font("JetBrains Mono", Font.BOLD, 12));
+		carAI.setPreferredSize(new Dimension(280, 30));
 		carAI.addActionListener(e -> {
 			synchronized (carMoving.carMonitor) {
 				if (!startCarMoving) {
@@ -477,11 +490,13 @@ public class MyFrame extends JFrame {
 			}
 		});
 		carAI.setFocusable(false);
+		carAI.setEnabled(false);
 		panel.add(carAI);
 
-		JButton motoAI = new JButton("Движение мотоциклов");
-		motoAI.setFont(new Font("JetBrains Mono", Font.BOLD, 10));
-		motoAI.setPreferredSize(new Dimension(138, 30));
+		motoAI = new JButton("Движение мотоциклов");
+		motoAI.setFont(new Font("JetBrains Mono", Font.BOLD, 12));
+		motoAI.setPreferredSize(new Dimension(280, 30));
+
 		motoAI.addActionListener(e -> {
 			synchronized (motoMoving.motoMonitor) {
 				if (!startMotoMoving) {
@@ -493,19 +508,20 @@ public class MyFrame extends JFrame {
 			}
 		});
 		motoAI.setFocusable(false);
+		motoAI.setEnabled(false);
 		panel.add(motoAI);
 
 		String[] priorities = {
-						"1",
-						"2",
-						"3",
-						"4",
-						"5",
-						"6",
-						"7",
-						"8",
-						"9",
-						"10",
+				"1",
+				"2",
+				"3",
+				"4",
+				"5",
+				"6",
+				"7",
+				"8",
+				"9",
+				"10",
 		};
 
 		carMovingPriority = new JLabel("Приоритет машин");
@@ -525,7 +541,6 @@ public class MyFrame extends JFrame {
 
 		});
 		carPriority.setFocusable(false);
-
 
 		motoMovingPriority = new JLabel("Приоритет мотоциклов");
 		motoMovingPriority.setFont(new Font("JetBrains Mono", Font.BOLD, 12));

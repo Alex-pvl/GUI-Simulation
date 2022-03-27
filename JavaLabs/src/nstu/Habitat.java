@@ -11,7 +11,7 @@ public class Habitat {
 	public final static int HEIGHT = 750;
 	public int N1 = 3, N2 = 4;
 	public int P1 = 60, P2 = 70;
-	public int speed = 5;
+	public int speed = 3;
 	public int carCount = 0;
 	public int motoCount = 0;
 	public Random random = new Random();
