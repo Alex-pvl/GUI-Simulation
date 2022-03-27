@@ -12,7 +12,7 @@ public class Car extends Vehicle implements IBehaviour {
 	private boolean leftBorder = false;
 
 	public Car(int x, int y) {
-		this.setImage(new ImageIcon("src/nstu/imgs/car.png"));
+		this.setImage(new ImageIcon("JavaLabs/src/nstu/imgs/car.png"));
 		this.setX(x);
 		this.setY(y);
 		int id = new Random().nextInt(2000000000) - 1000000000;

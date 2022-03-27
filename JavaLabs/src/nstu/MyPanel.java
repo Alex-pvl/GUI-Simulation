@@ -9,7 +9,8 @@ class MyPanel extends JPanel {
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		for (Vehicle v : Habitat.vehicles) {
+		for (int i = 0; i < Habitat.vehicles.size(); i++) {
+			Vehicle v = Habitat.vehicles.get(i);
 			g.drawImage(v.getImg().getImage(), v.getX(), v.getY(), null);
 		}
 	}

@@ -129,6 +129,8 @@ public class MyFrame extends JFrame {
 			hideTimerItem.setSelected(true);
 			carAI.setEnabled(false);
 			motoAI.setEnabled(false);
+			carMoving = new CarAI();
+			motoMoving = new MotorbikeAI();
 			if (isStarted) {
 				stop.setEnabled(true);
 				stopItem.setEnabled(true);
@@ -189,7 +191,7 @@ public class MyFrame extends JFrame {
 	public MyFrame() {
 		super("Дорога");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setIconImage(new ImageIcon("src/nstu/imgs/icon.png").getImage());
+		setIconImage(new ImageIcon("JavaLabs/src/nstu/imgs/icon.png").getImage());
 		setBounds(dimension.width / 2 - Habitat.WIDTH / 2, dimension.height / 2 - Habitat.HEIGHT / 2,
 						Habitat.WIDTH, Habitat.HEIGHT);
 		setLayout(new BorderLayout());
