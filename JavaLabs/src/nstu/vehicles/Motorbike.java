@@ -4,33 +4,58 @@ import nstu.Habitat;
 
 import javax.swing.*;
 import java.util.Random;
+import static nstu.Habitat.*;
 
 public class Motorbike extends Vehicle implements IBehaviour {
-    private static long timeLifeMoto = 8;
+	private static long timeLifeMoto = 18;
+	private boolean topBorder = false;
+	private boolean bottomBorder = false;
 
-    public Motorbike(int x, int y) {
-        this.image = new ImageIcon("JavaLabs/src/nstu/imgs/moto.png");
-        this.x = x;
-        this.y = y;
-        int id = new Random().nextInt(2000000000) - 1000000000;
-        while (true) {
-            if (Habitat.ids.contains(id)) {
-                id = new Random().nextInt(2000000000) - 1000000000;
-            } else {
-                break;
-            }
-        }
-        this.id = id;
-        Habitat.ids.add(id);
-    }
+	public Motorbike(int x, int y) {
+		this.setImage(new ImageIcon("JavaLabs/src/nstu/imgs/moto.png"));
+		this.setX(x);
+		this.setY(y);
+		int id = new Random().nextInt(2000000000) - 1000000000;
+		while (true) {
+			if (Habitat.ids.contains(id)) {
+				id = new Random().nextInt(2000000000) - 1000000000;
+			} else {
+				break;
+			}
+		}
+		this.setId(id);
+		Habitat.ids.add(id);
+	}
 
-    public static long getTimeLifeMoto() {
-        return timeLifeMoto;
-    }
+	public static long getTimeLifeMoto() {
+		return timeLifeMoto;
+	}
 
-    public static void setTimeLifeMoto(long timeLifeMoto) {
-        Motorbike.timeLifeMoto = timeLifeMoto;
-    }
+	public static void setTimeLifeMoto(long timeLifeMoto) {
+		Motorbike.timeLifeMoto = timeLifeMoto;
+	}
+
+	@Override
+	public void move() {
+		if (!topBorder && !bottomBorder) {
+			if (this.y >= 0) {
+				this.y -= speed;
+			} else {
+				topBorder = true;
+			}
+		}
+		if (topBorder && !bottomBorder) {
+			if (this.y <= HEIGHT - 135) {
+				this.y += speed;
+			} else {
+				bottomBorder = true;
+			}
+		}
+		if (topBorder && bottomBorder) {
+			topBorder = false;
+			bottomBorder = false;
+		}
+	}
 }
 
 

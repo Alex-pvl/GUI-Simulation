@@ -3,25 +3,55 @@ package nstu.vehicles;
 import javax.swing.*;
 
 public abstract class Vehicle {
-    public int x, y, id;
-    public long timeAppear;
-    public ImageIcon image;
+	protected int x, y, id, speed;
+	protected long timeAppear;
+	protected ImageIcon image;
 
-    public int getX() {
-        return x;
-    }
+	public int getSpeed() {
+		return speed;
+	}
 
-    public int getY() {
-        return y;
-    }
+	public int getX() {
+		return x;
+	}
 
-    public long getTimeAppear() {return timeAppear;}
+	public int getY() {
+		return y;
+	}
 
-    public void setTimeAppear(long timeAppear) {this.timeAppear = timeAppear;}
+	public void setSpeed(int speed) {
+		this.speed = speed;
+	}
 
-    public int getId() {return id;}
+	public void setX(int x) {
+		this.x = x;
+	}
 
-    public ImageIcon getImg() {
-        return image;
-    }
+	public void setY(int y) {
+		this.y = y;
+	}
+
+	public long getTimeAppear() {
+		return timeAppear;
+	}
+
+	public void setTimeAppear(long timeAppear) {
+		this.timeAppear = timeAppear;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public ImageIcon getImg() {
+		return image;
+	}
+
+	public void setImage(ImageIcon image) {
+		this.image = image;
+	}
 }
