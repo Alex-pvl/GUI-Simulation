@@ -44,13 +44,19 @@ public class MyFrame extends JFrame {
 	public JTextField motoTimeText;
 	public JButton currentVehicles;
 
-	public CarAI carMoving = new CarAI();
-	public MotorbikeAI motoMoving = new MotorbikeAI();
-	public static boolean startCarMoving = true;
-	public static boolean startMotoMoving = true;
+	public CarAI carMoving;
+	public MotorbikeAI motoMoving;
+	public static boolean startCarMoving;
+	public static boolean startMotoMoving;
+	public JLabel carMovingPriority;
+	public JLabel motoMovingPriority;
+	public JComboBox<String> carPriority;
+	public JComboBox<String> motoPriority;
 
 	public void startSimulation() {
 		if (!isStarted) {
+			startCarMoving = false;
+			startMotoMoving = false;
 			carMoving.start();
 			motoMoving.start();
 			start.setEnabled(false);
@@ -175,6 +181,9 @@ public class MyFrame extends JFrame {
 						Habitat.WIDTH, Habitat.HEIGHT);
 		setLayout(new BorderLayout());
 		setResizable(false);
+
+		carMoving = new CarAI();
+		motoMoving = new MotorbikeAI();
 
 		JPanel scene = new JPanel();
 		scene.setLayout(new BorderLayout());
@@ -453,6 +462,88 @@ public class MyFrame extends JFrame {
 		});
 		currentVehicles.setFocusable(false);
 		panel.add(currentVehicles);
+
+		JButton carAI = new JButton("Движение машин");
+		carAI.setFont(new Font("JetBrains Mono", Font.BOLD, 10));
+		carAI.setPreferredSize(new Dimension(138, 30));
+		carAI.addActionListener(e -> {
+			synchronized (carMoving.carMonitor) {
+				if (!startCarMoving) {
+					startCarMoving = true;
+					carMoving.carMonitor.notify();
+				} else {
+					startCarMoving = false;
+				}
+			}
+		});
+		carAI.setFocusable(false);
+		panel.add(carAI);
+
+		JButton motoAI = new JButton("Движение мотоциклов");
+		motoAI.setFont(new Font("JetBrains Mono", Font.BOLD, 10));
+		motoAI.setPreferredSize(new Dimension(138, 30));
+		motoAI.addActionListener(e -> {
+			synchronized (motoMoving.motoMonitor) {
+				if (!startMotoMoving) {
+					startMotoMoving = true;
+					motoMoving.motoMonitor.notify();
+				} else {
+					startMotoMoving = false;
+				}
+			}
+		});
+		motoAI.setFocusable(false);
+		panel.add(motoAI);
+
+		String[] priorities = {
+						"1",
+						"2",
+						"3",
+						"4",
+						"5",
+						"6",
+						"7",
+						"8",
+						"9",
+						"10",
+		};
+
+		carMovingPriority = new JLabel("Приоритет машин");
+		carMovingPriority.setFont(new Font("JetBrains Mono", Font.BOLD, 12));
+		panel.add(carMovingPriority);
+
+		carPriority = new JComboBox<>(priorities);
+		carPriority.setSelectedItem("" + carMoving.getPriority());
+		panel.add(carPriority);
+
+		carPriority.addActionListener(e -> {
+			if (e.getSource() == carPriority) {
+				String prb = (String) carPriority.getSelectedItem();
+				carMoving.setPriority(Integer.parseInt(prb));
+				System.out.println("Приоритет машин " + carMoving.getPriority());
+			}
+
+		});
+		carPriority.setFocusable(false);
+
+
+		motoMovingPriority = new JLabel("Приоритет мотоциклов");
+		motoMovingPriority.setFont(new Font("JetBrains Mono", Font.BOLD, 12));
+		panel.add(motoMovingPriority);
+
+		motoPriority = new JComboBox<>(priorities);
+		motoPriority.setSelectedItem("" + motoMoving.getPriority());
+		panel.add(motoPriority);
+
+		motoPriority.addActionListener(e -> {
+			if (e.getSource() == motoPriority) {
+				String prb = motoPriority.getSelectedItem().toString();
+				motoMoving.setPriority(Integer.parseInt(prb));
+				System.out.println("Приоритет мотоциклов: " + motoMoving.getPriority());
+			}
+		});
+		motoPriority.setFocusable(false);
+
 
 		setVisible(true);
 	}

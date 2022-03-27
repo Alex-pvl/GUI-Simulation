@@ -9,8 +9,8 @@ public class MotorbikeAI extends BaseAI {
 	public final Object motoMonitor;
 
 	public MotorbikeAI() {
-		setPriority(1);
 		motoMonitor = new Object();
+		setPriority(1);
 	}
 
 	@Override
@@ -19,7 +19,7 @@ public class MotorbikeAI extends BaseAI {
 			synchronized (motoMonitor) {
 				if (!MyFrame.startMotoMoving) {
 					try {
-						wait();
+						motoMonitor.wait();
 					} catch (InterruptedException e) {
 						System.out.println("Поток прерван: " + e.getMessage());
 					}
@@ -32,7 +32,7 @@ public class MotorbikeAI extends BaseAI {
 				}
 			}
 			try {
-				Thread.sleep(150);
+				Thread.sleep(500);
 			} catch (InterruptedException e) {
 				System.out.println("Поток прерван: " + e.getMessage());
 			}

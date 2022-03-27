@@ -9,8 +9,8 @@ public class CarAI extends BaseAI {
 	public final Object carMonitor;
 
 	public CarAI() {
-		setPriority(1);
 		carMonitor = new Object();
+		setPriority(1);
 	}
 
 	@Override
@@ -19,7 +19,7 @@ public class CarAI extends BaseAI {
 			synchronized (carMonitor) {
 				if (!MyFrame.startCarMoving) {
 					try {
-						wait();
+						carMonitor.wait();
 					} catch (InterruptedException e) {
 						System.out.println("Поток прерван: " + e.getMessage());
 					}
@@ -32,7 +32,7 @@ public class CarAI extends BaseAI {
 				}
 			}
 			try {
-				Thread.sleep(150);
+				Thread.sleep(500);
 			} catch (InterruptedException e) {
 				System.out.println("Поток прерван: " + e.getMessage());
 			}
