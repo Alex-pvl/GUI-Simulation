@@ -55,6 +55,7 @@ public class MyFrame extends JFrame {
 	public JLabel motoMovingPriority;
 	public JComboBox<String> carPriority;
 	public JComboBox<String> motoPriority;
+	public JSlider speedSlider;
 
 	public void startSimulation() {
 		if (!isStarted) {
@@ -478,6 +479,17 @@ public class MyFrame extends JFrame {
 		currentVehicles.setFocusable(false);
 		panel.add(currentVehicles);
 
+		speedSlider = new JSlider(0,50,35);
+		speedSlider.setFont(new Font("JetBrains Mono", Font.BOLD, 12));
+		speedSlider.setBackground(panel.getBackground());
+		JLabel speedLabel = new JLabel("Скорость: " + Habitat.speed);
+		speedSlider.addChangeListener(e -> {
+			Habitat.speed = (float) speedSlider.getValue() / 10;
+			speedLabel.setText("Скорость: " + Habitat.speed);
+		});
+		panel.add(speedSlider);
+		panel.add(speedLabel);
+
 		carAI = new JButton("Движение машин");
 		carAI.setFont(new Font("JetBrains Mono", Font.BOLD, 12));
 		carAI.setPreferredSize(new Dimension(280, 30));
@@ -560,7 +572,6 @@ public class MyFrame extends JFrame {
 			}
 		});
 		motoPriority.setFocusable(false);
-
 
 		setVisible(true);
 	}

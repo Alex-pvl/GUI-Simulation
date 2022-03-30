@@ -11,7 +11,8 @@ class MyPanel extends JPanel {
 		super.paintComponent(g);
 		for (int i = 0; i < Habitat.vehicles.size(); i++) {
 			Vehicle v = Habitat.vehicles.get(i);
-			g.drawImage(v.getImg().getImage(), v.getX(), v.getY(), null);
+			v.setSpeed(Habitat.speed);
+			g.drawImage(v.getImg().getImage(), (int) v.getX(), (int) v.getY(), null);
 		}
 	}
 

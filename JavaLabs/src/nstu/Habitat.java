@@ -11,7 +11,7 @@ public class Habitat {
 	public final static int HEIGHT = 750;
 	public int N1 = 3, N2 = 4;
 	public int P1 = 60, P2 = 70;
-	public int speed = 3;
+	public static float speed = 3.5f;
 	public int carCount = 0;
 	public int motoCount = 0;
 	public Random random = new Random();
@@ -28,6 +28,7 @@ public class Habitat {
 				vehicles.remove(v);
 				ids.remove(v.getId());
 				times.remove(v.getId());
+				carCount--;
 				i--;
 				System.out.println("-car{" + v.getX() + "; " + v.getY() + "; " + v.getId() + "}");
 			} else if ((v instanceof Motorbike) &&
@@ -35,6 +36,7 @@ public class Habitat {
 				vehicles.remove(i);
 				ids.remove(i);
 				times.remove(i);
+				motoCount--;
 				i--;
 				System.out.println("-motorbike{" + v.getX() + "; " + v.getY() + "; " + v.getId() + "}");
 			}

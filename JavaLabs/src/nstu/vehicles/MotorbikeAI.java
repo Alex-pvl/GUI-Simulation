@@ -25,7 +25,8 @@ public class MotorbikeAI extends BaseAI {
 					}
 				}
 
-				for (Vehicle v : vehicles) {
+				for (int i = 0; i < vehicles.size(); i++) {
+					Vehicle v = vehicles.get(i);
 					if (v instanceof Motorbike) {
 						((Motorbike) v).move();
 					}

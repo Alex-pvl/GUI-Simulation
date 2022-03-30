@@ -3,31 +3,32 @@ package nstu.vehicles;
 import javax.swing.*;
 
 public abstract class Vehicle {
-	protected int x, y, id, speed;
+	protected float x, y, speed;
+	protected int id;
 	protected long timeAppear;
 	protected ImageIcon image;
 
-	public int getSpeed() {
+	public float getSpeed() {
 		return speed;
 	}
 
-	public int getX() {
+	public float getX() {
 		return x;
 	}
 
-	public int getY() {
+	public float getY() {
 		return y;
 	}
 
-	public void setSpeed(int speed) {
+	public void setSpeed(float speed) {
 		this.speed = speed;
 	}
 
-	public void setX(int x) {
+	public void setX(float x) {
 		this.x = x;
 	}
 
-	public void setY(int y) {
+	public void setY(float y) {
 		this.y = y;
 	}
 
