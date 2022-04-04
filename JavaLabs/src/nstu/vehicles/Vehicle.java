@@ -1,8 +1,9 @@
 package nstu.vehicles;
 
 import javax.swing.*;
+import java.io.Serializable;
 
-public abstract class Vehicle {
+public abstract class Vehicle implements Serializable {
 	protected float x, y, speed;
 	protected int id;
 	protected long timeAppear;

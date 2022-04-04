@@ -31,6 +31,7 @@ public class CarAI extends BaseAI {
 						((Car) v).move();
 					}
 				}
+
 			}
 			try {
 				Thread.sleep(10);

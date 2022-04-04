@@ -4,7 +4,6 @@ import nstu.Habitat;
 
 import javax.swing.*;
 import java.util.Random;
-import static nstu.Habitat.*;
 
 public class Motorbike extends Vehicle implements IBehaviour {
 	private static long timeLifeMoto = 18;
@@ -45,7 +44,7 @@ public class Motorbike extends Vehicle implements IBehaviour {
 			}
 		}
 		if (topBorder && !bottomBorder) {
-			if (this.y <= HEIGHT - 135) {
+			if (this.y <= 750 - 135) {
 				this.y += speed;
 			} else {
 				bottomBorder = true;

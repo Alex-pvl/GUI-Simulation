@@ -4,21 +4,24 @@ import nstu.vehicles.Car;
 import nstu.vehicles.Motorbike;
 import nstu.vehicles.Vehicle;
 
+import java.io.Serializable;
 import java.util.*;
 
-public class Habitat {
-	public final static int WIDTH = 1200;
-	public final static int HEIGHT = 750;
-	public int N1 = 3, N2 = 4;
-	public int P1 = 60, P2 = 70;
+public class Habitat implements Serializable {
+	private final  static long serializedUID = 1;
+
+	public final int WIDTH = 1200;
+	public final int HEIGHT = 750;
+	public static int N1 = 3, N2 = 4;
+	public static int P1 = 60, P2 = 70;
 	public static float speed = 3.5f;
-	public int carCount = 0;
-	public int motoCount = 0;
+	public static int carCount = 0;
+	public static int motoCount = 0;
 	public Random random = new Random();
 
-	public final static List<Vehicle> vehicles = new ArrayList<>();
+	public static List<Vehicle> vehicles = new ArrayList<>();
 	public static Set<Integer> ids = new HashSet<>();
-	public final static Map<Integer, Long> times = new TreeMap<>();
+	public static Map<Integer, Long> times = new TreeMap<>();
 
 	public void update(long time) {
 		for (int i = 0; i < vehicles.size(); i++) {

@@ -5,9 +5,12 @@ import nstu.vehicles.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.Objects;
+import java.io.*;
+import java.util.*;
+import java.util.List;
 import java.util.Timer;
-import java.util.TimerTask;
+
+import static nstu.Habitat.*;
 
 public class MyFrame extends JFrame {
 	public Toolkit toolkit = Toolkit.getDefaultToolkit();
@@ -33,6 +36,8 @@ public class MyFrame extends JFrame {
 	public JComboBox<String> carProbability;
 	public JList<String> motoProbability;
 
+	public JMenuItem saveSimilation;
+	public JMenuItem loadSimilation;
 	public JMenuItem startItem;
 	public JMenuItem stopItem;
 	public JMenuItem showInfoItem;
@@ -57,6 +62,11 @@ public class MyFrame extends JFrame {
 	public JComboBox<String> motoPriority;
 	public JSlider speedSlider;
 
+	public JButton console;
+	public JDialog consoleDialog;
+	public JTextField inputArea;
+	public JTextArea outputArea;
+
 	public void startSimulation() {
 		if (!isStarted) {
 			startCarMoving = false;
@@ -65,6 +75,7 @@ public class MyFrame extends JFrame {
 			motoAI.setEnabled(true);
 			carMoving.start();
 			motoMoving.start();
+			loadSimilation.setEnabled(true);
 			start.setEnabled(false);
 			startItem.setEnabled(false);
 			stop.setEnabled(true);
@@ -72,13 +83,11 @@ public class MyFrame extends JFrame {
 			start.setContentAreaFilled(false);
 			stop.setContentAreaFilled(true);
 			System.out.println("---------------------------");
-			System.out.println("Car: chance - " + h.P1 + "%, time - " + h.N1 +
-							"\nBike: chance - " + h.P2 + "%, time - " + h.N2);
 			repaint();
 
 			isStarted = true;
-			h.carCount = 0;
-			h.motoCount = 0;
+			carCount = 0;
+			motoCount = 0;
 			timer = new Timer();
 			time = 0;
 			timer.schedule(new TimerTask() {
@@ -106,9 +115,9 @@ public class MyFrame extends JFrame {
 		dialog = new JOptionPane();
 		JTextArea stats = new JTextArea(
 						"Время симуляции: " + time + " c" +
-										"\nВсего объектов: " + Habitat.vehicles.size() +
-										"\nЧисло машин: " + h.carCount +
-										"\nЧисло мотоциклов: " + h.motoCount
+										"\nВсего объектов: " + vehicles.size() +
+										"\nЧисло машин: " + carCount +
+										"\nЧисло мотоциклов: " + motoCount
 		);
 		stats.setBackground(dialog.getBackground());
 		stats.setEditable(false);
@@ -124,6 +133,7 @@ public class MyFrame extends JFrame {
 		}
 
 		if (n == JOptionPane.YES_OPTION) {
+			loadSimilation.setEnabled(false);
 			showTimer.setSelected(false);
 			showTimerItem.setSelected(false);
 			hideTimer.setSelected(true);
@@ -145,7 +155,7 @@ public class MyFrame extends JFrame {
 			}
 			timeLabel.setText("Время: 0 с");
 
-			Habitat.vehicles.clear();
+			vehicles.clear();
 			start.setEnabled(true);
 			startItem.setEnabled(true);
 			stop.setEnabled(false);
@@ -193,8 +203,8 @@ public class MyFrame extends JFrame {
 		super("Дорога");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setIconImage(new ImageIcon("JavaLabs/src/nstu/imgs/icon.png").getImage());
-		setBounds(dimension.width / 2 - Habitat.WIDTH / 2, dimension.height / 2 - Habitat.HEIGHT / 2,
-						Habitat.WIDTH, Habitat.HEIGHT);
+		setBounds(dimension.width / 2 - h.WIDTH / 2, dimension.height / 2 - h.HEIGHT / 2,
+						h.WIDTH, h.HEIGHT);
 		setLayout(new BorderLayout());
 		setResizable(false);
 
@@ -206,7 +216,7 @@ public class MyFrame extends JFrame {
 		add(scene);
 
 		MyPanel road = new MyPanel();
-		road.setBounds(0, 0, Habitat.WIDTH - 350, Habitat.HEIGHT);
+		road.setBounds(0, 0, WIDTH - 350, HEIGHT);
 		road.setLayout(new FlowLayout(FlowLayout.LEFT));
 		road.setBackground(Color.WHITE);
 		scene.add(road);
@@ -217,6 +227,7 @@ public class MyFrame extends JFrame {
 		timeLabel.setVisible(false);
 		road.add(timeLabel);
 
+		// -------------------------- Панель -----------------------------
 
 		panel = new JPanel();
 		panel.addMouseListener(new MouseAdapter() {
@@ -225,7 +236,7 @@ public class MyFrame extends JFrame {
 				requestFocusInWindow();
 			}
 		});
-		panel.setPreferredSize(new Dimension(290, Habitat.HEIGHT));
+		panel.setPreferredSize(new Dimension(290, HEIGHT));
 		panel.setLayout(new FlowLayout(FlowLayout.LEFT));
 		panel.setBackground(Color.LIGHT_GRAY);
 		scene.add(panel, BorderLayout.EAST);
@@ -237,8 +248,7 @@ public class MyFrame extends JFrame {
 					case 'b' -> startSimulation();
 					case 'e' -> stopSimulation();
 					case 't' -> getTimer();
-					default -> {
-					}
+					default -> {}
 				}
 			}
 		});
@@ -289,18 +299,18 @@ public class MyFrame extends JFrame {
 		submitCar = new JButton("Ок");
 		submitCar.setPreferredSize(new Dimension(50, 15));
 		JLabel carsFreq = new JLabel("Частота появления машин");
-		carsFreqText = new JTextField("" + h.N1, 2);
+		carsFreqText = new JTextField("" + N1, 2);
 		carsFreq.setFont(new Font("JetBrains Mono", Font.BOLD, 12));
 		carsFreqText.setFont(new Font("JetBrains Mono", Font.BOLD, 12));
 		submitCar.addActionListener(e -> {
 			try {
-				h.N1 = Integer.parseInt(carsFreqText.getText());
-				if (h.N1 <= 0) throw new Exception();
+				N1 = Integer.parseInt(carsFreqText.getText());
+				if (N1 <= 0) throw new Exception();
 			} catch (Exception exp) {
 				JOptionPane.showMessageDialog(this, "Введите целое положительое число!");
-				h.N1 = 3;
+				N1 = 3;
 				System.out.println("Поймано исключение " + exp.getMessage());
-				carsFreqText.setText("" + h.N1);
+				carsFreqText.setText("" + N1);
 			}
 		});
 		submitCar.setFocusable(false);
@@ -311,18 +321,18 @@ public class MyFrame extends JFrame {
 		submitMoto = new JButton("Ок");
 		submitMoto.setPreferredSize(new Dimension(50, 15));
 		JLabel motoFreq = new JLabel("Частота появления мотоциклов");
-		motoFreqText = new JTextField("" + h.N2, 2);
+		motoFreqText = new JTextField("" + N2, 2);
 		motoFreq.setFont(new Font("JetBrains Mono", Font.BOLD, 12));
 		motoFreqText.setFont(new Font("JetBrains Mono", Font.BOLD, 12));
 		submitMoto.addActionListener(e -> {
 			try {
-				h.N2 = Integer.parseInt(motoFreqText.getText());
-				if (h.N2 <= 0) throw new Exception();
+				N2 = Integer.parseInt(motoFreqText.getText());
+				if (N2 <= 0) throw new Exception();
 			} catch (Exception exp) {
 				JOptionPane.showMessageDialog(this, "Введите целое положительое число!");
-				h.N2 = 4;
+				N2 = 4;
 				System.out.println("Поймано исключение " + exp.getMessage());
-				motoFreqText.setText("" + h.N2);
+				motoFreqText.setText("" + N2);
 			}
 		});
 		submitMoto.setFocusable(false);
@@ -348,13 +358,13 @@ public class MyFrame extends JFrame {
 		carsP.setFont(new Font("JetBrains Mono", Font.BOLD, 12));
 		panel.add(carsP);
 		carProbability = new JComboBox<>(prob);
-		carProbability.setSelectedItem("" + h.P1 + "%");
+		carProbability.setSelectedItem("" + P1 + "%");
 		panel.add(carProbability);
 
 		carProbability.addActionListener(e -> {
 			if (e.getSource() == carProbability) {
 				String prb = Objects.requireNonNull(carProbability.getSelectedItem()).toString().replace("%", "");
-				h.P1 = Integer.parseInt(prb);
+				P1 = Integer.parseInt(prb);
 			}
 		});
 		carProbability.setFocusable(false);
@@ -371,40 +381,11 @@ public class MyFrame extends JFrame {
 		motoProbability.addListSelectionListener(e -> {
 			if (e.getSource() == motoProbability) {
 				String prb = motoProbability.getSelectedValue().replace("%", "");
-				h.P2 = Integer.parseInt(prb);
+				P2 = Integer.parseInt(prb);
 			}
 		});
 		motoProbability.setFocusable(false);
 		panel.add(motoProbability);
-
-		JMenuBar menu = new JMenuBar();
-
-		JMenu simulationMenu = new JMenu("Симуляция");
-		startItem = new JMenuItem("Старт");
-		stopItem = new JMenuItem("Стоп");
-		showInfoItem = new JCheckBoxMenuItem("Показывать информацию");
-		startItem.addActionListener(e -> startSimulation());
-		stopItem.addActionListener(e -> stopSimulation());
-		stopItem.setEnabled(false);
-		showInfoItem.addActionListener(e -> showInfo.setSelected(showInfoItem.isSelected()));
-		simulationMenu.add(startItem);
-		simulationMenu.add(stopItem);
-		simulationMenu.add(showInfoItem);
-
-		JMenu timerMenu = new JMenu("Таймер");
-		showTimerItem = new JRadioButtonMenuItem("Показывать");
-		hideTimerItem = new JRadioButtonMenuItem("Скрывать");
-		showTimerItem.addActionListener(e -> getTimer());
-		hideTimerItem.addActionListener(e -> getTimer());
-		hideTimerItem.setSelected(true);
-		timerMenu.add(showTimerItem);
-		timerMenu.add(hideTimerItem);
-
-		menu.add(simulationMenu);
-		menu.add(timerMenu);
-
-		setJMenuBar(menu);
-		menu.setFocusable(false);
 
 		submitCarTime = new JButton("Ок");
 		submitCarTime.setPreferredSize(new Dimension(50, 15));
@@ -549,8 +530,8 @@ public class MyFrame extends JFrame {
 		carPriority.addActionListener(e -> {
 			if (e.getSource() == carPriority) {
 				String prb = (String) carPriority.getSelectedItem();
+				assert prb != null;
 				carMoving.setPriority(Integer.parseInt(prb));
-				System.out.println("Приоритет машин " + carMoving.getPriority());
 			}
 
 		});
@@ -566,12 +547,173 @@ public class MyFrame extends JFrame {
 
 		motoPriority.addActionListener(e -> {
 			if (e.getSource() == motoPriority) {
-				String prb = motoPriority.getSelectedItem().toString();
+				String prb = Objects.requireNonNull(motoPriority.getSelectedItem()).toString();
 				motoMoving.setPriority(Integer.parseInt(prb));
-				System.out.println("Приоритет мотоциклов: " + motoMoving.getPriority());
 			}
 		});
 		motoPriority.setFocusable(false);
+
+		console = new JButton("Консоль");
+		console.setPreferredSize(new Dimension(280, 30));
+		console.setFont(new Font("JetBrains Mono", Font.BOLD, 12));
+		consoleDialog = new JDialog(this, "Консоль", JDialog.isDefaultLookAndFeelDecorated());
+		consoleDialog.setLayout(new FlowLayout(FlowLayout.LEFT));
+
+		inputArea = new JTextField();
+		inputArea.setPreferredSize(new Dimension(400, 50));
+		inputArea.setBackground(Color.WHITE);
+		inputArea.setForeground(Color.BLACK);
+		inputArea.setEditable(false);
+
+		outputArea = new JTextArea();
+		outputArea.setPreferredSize(new Dimension(400, 150));
+		outputArea.setBackground(Color.BLACK);
+		outputArea.setForeground(Color.WHITE);
+
+		consoleDialog.setBounds(dimension.width / 2 - 211, dimension.height / 2 - 125,423,250);
+		consoleDialog.add(inputArea);
+		consoleDialog.add(outputArea);
+		console.addActionListener(e -> {
+			consoleDialog.setVisible(true);
+			requestFocus();
+		});
+		console.setFocusable(false);
+		panel.add(console);
+
+		// -------------------------- Меню -----------------------------
+
+		JMenuBar menu = new JMenuBar();
+
+		JMenu fileMenu = new JMenu("Файл");
+		saveSimilation = new JMenuItem("Сохранить");
+		loadSimilation = new JMenuItem("Загрузить");
+		loadSimilation.setEnabled(false);
+
+		saveSimilation.addActionListener(e -> {
+			try (FileOutputStream outputStream = new FileOutputStream("JavaLabs/src/nstu/config.txt");
+					 ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream)) {
+				objectOutputStream.writeObject(vehicles);
+				objectOutputStream.writeObject(ids);
+				objectOutputStream.writeObject(times);
+
+				int isInfo = showInfo.isSelected() ? 1 : 0;
+				int showT = showTimer.isSelected() ? 1 : 0;
+				int hideT = hideTimer.isSelected() ? 1 : 0;
+				outputStream.write(isInfo);
+				outputStream.write(showT);
+				outputStream.write(hideT);
+
+				outputStream.write(N1);
+				outputStream.write(N2);
+				outputStream.write(P1);
+				outputStream.write(P2);
+
+				outputStream.write((int) Car.getTimeLifeCar());
+				outputStream.write((int) Motorbike.getTimeLifeMoto());
+
+				outputStream.write((int) (speed * 10));
+				outputStream.write(carMoving.getPriority());
+				outputStream.write(motoMoving.getPriority());
+
+			} catch (IOException exp) {
+				System.out.println("OutputException: " + exp.getMessage());
+			}
+		});
+
+		loadSimilation.addActionListener(e -> {
+			try (FileInputStream inputStream = new FileInputStream("JavaLabs/src/nstu/config.txt");
+					 ObjectInputStream objectInputStream = new ObjectInputStream(inputStream)) {
+				time = 0;
+				vehicles.clear();
+				vehicles = (List<Vehicle>) objectInputStream.readObject();
+				ids = (Set<Integer>) objectInputStream.readObject();
+				times = (Map<Integer, Long>) objectInputStream.readObject();
+				times.clear();
+
+				boolean isInfoB = inputStream.read() == 1;
+				boolean showTB = inputStream.read() == 1;
+				boolean hideTB = inputStream.read() == 1;
+				showInfo.setSelected(isInfoB);
+				showInfoItem.setSelected(isInfoB);
+				showTimerItem.setSelected(showTB);
+				showTimer.setSelected(showTB);
+				hideTimer.setSelected(hideTB);
+				hideTimerItem.setSelected(hideTB);
+				timeLabel.setVisible(showTB);
+
+				N1 = inputStream.read();
+				N2 = inputStream.read();
+				P1 = inputStream.read();
+				P2 = inputStream.read();
+
+				Car.setTimeLifeCar(inputStream.read());
+				Motorbike.setTimeLifeMoto(inputStream.read());
+
+				speed = (float) (inputStream.read() / 10);
+				carMoving.setPriority(inputStream.read());
+				motoMoving.setPriority(inputStream.read());
+
+
+				for (Vehicle v : vehicles) {
+					v.setTimeAppear(0);
+					times.put(v.getId(), 0L);
+					if (v instanceof Car) {
+						carCount++;
+					} else {
+						motoCount++;
+					}
+				}
+				carsFreqText.setText("" + N1);
+				motoFreqText.setText("" + N2);
+				carProbability.setSelectedItem("" + P1 + "%");
+				motoProbability.setSelectedIndex(P2 / 10);
+				carsTimeText.setText("" + Car.getTimeLifeCar());
+				motoTimeText.setText("" + Motorbike.getTimeLifeMoto());
+				speedSlider.setValue((int) (speed * 10));
+				carPriority.setSelectedItem("" + carMoving.getPriority());
+				motoPriority.setSelectedItem("" + motoMoving.getPriority());
+
+
+				System.out.println(N1 + " " + N2 + " " + P1 + " " + P2 + " " + speed + " " + carMoving.getPriority() + " " +
+								motoMoving.getPriority() + " ");
+
+			} catch (IOException ex1) {
+				ex1.printStackTrace();
+			} catch (ClassNotFoundException ex2) {
+				System.out.println("ClassNotFoundException: " + ex2.getMessage());
+			}
+		});
+
+		fileMenu.add(saveSimilation);
+		fileMenu.add(loadSimilation);
+
+		JMenu simulationMenu = new JMenu("Симуляция");
+		startItem = new JMenuItem("Старт");
+		stopItem = new JMenuItem("Стоп");
+		showInfoItem = new JCheckBoxMenuItem("Показывать информацию");
+		startItem.addActionListener(e -> startSimulation());
+		stopItem.addActionListener(e -> stopSimulation());
+		stopItem.setEnabled(false);
+		showInfoItem.addActionListener(e -> showInfo.setSelected(showInfoItem.isSelected()));
+		simulationMenu.add(startItem);
+		simulationMenu.add(stopItem);
+		simulationMenu.add(showInfoItem);
+
+		JMenu timerMenu = new JMenu("Таймер");
+		showTimerItem = new JRadioButtonMenuItem("Показывать");
+		hideTimerItem = new JRadioButtonMenuItem("Скрывать");
+		showTimerItem.addActionListener(e -> getTimer());
+		hideTimerItem.addActionListener(e -> getTimer());
+		hideTimerItem.setSelected(true);
+		timerMenu.add(showTimerItem);
+		timerMenu.add(hideTimerItem);
+
+		menu.add(fileMenu);
+		menu.add(simulationMenu);
+		menu.add(timerMenu);
+
+		setJMenuBar(menu);
+		menu.setFocusable(false);
 
 		setVisible(true);
 	}

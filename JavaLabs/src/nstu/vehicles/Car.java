@@ -3,6 +3,7 @@ package nstu.vehicles;
 import nstu.Habitat;
 
 import javax.swing.*;
+import java.io.Serializable;
 import java.util.Random;
 import static nstu.Habitat.*;
 
@@ -38,7 +39,7 @@ public class Car extends Vehicle implements IBehaviour {
 	@Override
 	public void move() {
 		if (!rightBorder && !leftBorder) {
-			if (this.x <= WIDTH - 440) {
+			if (this.x <= 1200 - 440) {
 				this.x += speed;
 			} else {
 				rightBorder = true;
