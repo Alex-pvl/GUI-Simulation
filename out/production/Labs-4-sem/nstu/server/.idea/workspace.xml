@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="4bf5acc9-0650-4808-a36e-e69525d48ce1" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/../.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/codeStyles/Project.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/codeStyles/codeStyleConfig.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/description.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/encodings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/project-template.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../JavaLabs.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../docs/Lab_rab_po_TP.docx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../docs/Metod_Java.doc" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../out/production/JavaLabs/nstu/BaseAI.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../out/production/JavaLabs/nstu/Habitat.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../out/production/JavaLabs/nstu/Main.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../out/production/JavaLabs/nstu/MyFrame$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../out/production/JavaLabs/nstu/MyFrame$2$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../out/production/JavaLabs/nstu/MyFrame$2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../out/production/JavaLabs/nstu/MyFrame$3$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../out/production/JavaLabs/nstu/MyFrame$3.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../out/production/JavaLabs/nstu/MyFrame$4.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../out/production/JavaLabs/nstu/MyFrame$5.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../out/production/JavaLabs/nstu/MyFrame.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../out/production/JavaLabs/nstu/MyPanel.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../out/production/JavaLabs/nstu/imgs/car.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../out/production/JavaLabs/nstu/imgs/icon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../out/production/JavaLabs/nstu/imgs/moto.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../out/production/JavaLabs/nstu/vehicles/Car.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../out/production/JavaLabs/nstu/vehicles/CarAI.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../out/production/JavaLabs/nstu/vehicles/IBehaviour.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../out/production/JavaLabs/nstu/vehicles/Motorbike.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../out/production/JavaLabs/nstu/vehicles/MotorbikeAI.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../out/production/JavaLabs/nstu/vehicles/Vehicle.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/nstu/BaseAI.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/nstu/Habitat.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/nstu/Main.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/nstu/MyConsole.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/nstu/MyFrame.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/nstu/MyPanel.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/nstu/config.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/nstu/imgs/car.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/nstu/imgs/icon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/nstu/imgs/moto.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/nstu/vehicles/Car.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/nstu/vehicles/CarAI.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/nstu/vehicles/IBehaviour.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/nstu/vehicles/Motorbike.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/nstu/vehicles/MotorbikeAI.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/nstu/vehicles/Vehicle.java" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
+  </component>
+  <component name="ProjectId" id="27QISjJpBtI5y6tgPp4U5qzLysT" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../.." />
+    <property name="settings.editor.selected.configurable" value="advanced.settings" />
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="4bf5acc9-0650-4808-a36e-e69525d48ce1" name="Changes" comment="" />
+      <created>1649245889118</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1649245889118</updated>
+      <workItem from="1649245891105" duration="27000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>
