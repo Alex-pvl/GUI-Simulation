@@ -64,8 +64,6 @@ public class MyFrame extends JFrame {
 
 	public JButton console;
 	public JDialog consoleDialog;
-	public JTextField inputArea;
-	public JTextArea outputArea;
 
 	public void startSimulation() {
 		if (!isStarted) {
@@ -82,20 +80,21 @@ public class MyFrame extends JFrame {
 			stopItem.setEnabled(true);
 			start.setContentAreaFilled(false);
 			stop.setContentAreaFilled(true);
+			console.setEnabled(true);
 			System.out.println("---------------------------");
 			repaint();
 
 			isStarted = true;
-			carCount = 0;
-			motoCount = 0;
+			h.carCount = 0;
+			h.motoCount = 0;
 			timer = new Timer();
 			time = 0;
 			timer.schedule(new TimerTask() {
 				@Override
 				public void run() {
-					time+=1;
-						h.update(time);
-						timeLabel.setText("Время: " + time + " с");
+					time += 1;
+					h.update(time);
+					timeLabel.setText("Время: " + time + " с");
 				}
 			}, 0, 1000);
 			timerRepaint = new Timer();
@@ -115,9 +114,9 @@ public class MyFrame extends JFrame {
 		dialog = new JOptionPane();
 		JTextArea stats = new JTextArea(
 						"Время симуляции: " + time + " c" +
-										"\nВсего объектов: " + vehicles.size() +
-										"\nЧисло машин: " + carCount +
-										"\nЧисло мотоциклов: " + motoCount
+										"\nВсего объектов: " + h.vehicles.size() +
+										"\nЧисло машин: " + h.carCount +
+										"\nЧисло мотоциклов: " + h.motoCount
 		);
 		stats.setBackground(dialog.getBackground());
 		stats.setEditable(false);
@@ -162,6 +161,7 @@ public class MyFrame extends JFrame {
 			stopItem.setEnabled(false);
 			start.setContentAreaFilled(true);
 			stop.setContentAreaFilled(false);
+			console.setEnabled(false);
 			repaint();
 		} else {
 			timer = new Timer();
@@ -248,7 +248,8 @@ public class MyFrame extends JFrame {
 					case 'b' -> startSimulation();
 					case 'e' -> stopSimulation();
 					case 't' -> getTimer();
-					default -> {}
+					default -> {
+					}
 				}
 			}
 		});
@@ -460,7 +461,7 @@ public class MyFrame extends JFrame {
 		currentVehicles.setFocusable(false);
 		panel.add(currentVehicles);
 
-		speedSlider = new JSlider(0,50,35);
+		speedSlider = new JSlider(0, 50, 35);
 		speedSlider.setFont(new Font("JetBrains Mono", Font.BOLD, 12));
 		speedSlider.setBackground(panel.getBackground());
 		JLabel speedLabel = new JLabel("Скорость: " + Habitat.speed);
@@ -507,16 +508,16 @@ public class MyFrame extends JFrame {
 		panel.add(motoAI);
 
 		String[] priorities = {
-				"1",
-				"2",
-				"3",
-				"4",
-				"5",
-				"6",
-				"7",
-				"8",
-				"9",
-				"10",
+						"1",
+						"2",
+						"3",
+						"4",
+						"5",
+						"6",
+						"7",
+						"8",
+						"9",
+						"10",
 		};
 
 		carMovingPriority = new JLabel("Приоритет машин");
@@ -556,28 +557,18 @@ public class MyFrame extends JFrame {
 		console = new JButton("Консоль");
 		console.setPreferredSize(new Dimension(280, 30));
 		console.setFont(new Font("JetBrains Mono", Font.BOLD, 12));
-		consoleDialog = new JDialog(this, "Консоль", JDialog.isDefaultLookAndFeelDecorated());
-		consoleDialog.setLayout(new FlowLayout(FlowLayout.LEFT));
 
-		inputArea = new JTextField();
-		inputArea.setPreferredSize(new Dimension(400, 50));
-		inputArea.setBackground(Color.WHITE);
-		inputArea.setForeground(Color.BLACK);
-		inputArea.setEditable(false);
-
-		outputArea = new JTextArea();
-		outputArea.setPreferredSize(new Dimension(400, 150));
-		outputArea.setBackground(Color.BLACK);
-		outputArea.setForeground(Color.WHITE);
-
-		consoleDialog.setBounds(dimension.width / 2 - 211, dimension.height / 2 - 125,423,250);
-		consoleDialog.add(inputArea);
-		consoleDialog.add(outputArea);
+		// -------------------------- Консоль -----------------------------
 		console.addActionListener(e -> {
-			consoleDialog.setVisible(true);
-			requestFocus();
+			try {
+				consoleDialog = new MyConsole(this, h);
+				consoleDialog.setVisible(true);
+			} catch (IOException ex) {
+				System.out.println("IOException: " + ex.getMessage());
+			}
 		});
 		console.setFocusable(false);
+		console.setEnabled(false);
 		panel.add(console);
 
 		// -------------------------- Меню -----------------------------
@@ -592,9 +583,9 @@ public class MyFrame extends JFrame {
 		saveSimilation.addActionListener(e -> {
 			try (FileOutputStream outputStream = new FileOutputStream("JavaLabs/src/nstu/config.txt");
 					 ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream)) {
-				objectOutputStream.writeObject(vehicles);
-				objectOutputStream.writeObject(ids);
-				objectOutputStream.writeObject(times);
+				objectOutputStream.writeObject(h.vehicles);
+				objectOutputStream.writeObject(h.ids);
+				objectOutputStream.writeObject(h.times);
 
 				int isInfo = showInfo.isSelected() ? 1 : 0;
 				int showT = showTimer.isSelected() ? 1 : 0;
@@ -603,15 +594,15 @@ public class MyFrame extends JFrame {
 				outputStream.write(showT);
 				outputStream.write(hideT);
 
-				outputStream.write(N1);
-				outputStream.write(N2);
-				outputStream.write(P1);
-				outputStream.write(P2);
+				outputStream.write(h.N1);
+				outputStream.write(h.N2);
+				outputStream.write(h.P1);
+				outputStream.write(h.P2);
 
 				outputStream.write((int) Car.getTimeLifeCar());
 				outputStream.write((int) Motorbike.getTimeLifeMoto());
 
-				outputStream.write((int) (speed * 10));
+				outputStream.write((int) (h.speed * 10));
 				outputStream.write(carMoving.getPriority());
 				outputStream.write(motoMoving.getPriority());
 
@@ -624,11 +615,14 @@ public class MyFrame extends JFrame {
 			try (FileInputStream inputStream = new FileInputStream("JavaLabs/src/nstu/config.txt");
 					 ObjectInputStream objectInputStream = new ObjectInputStream(inputStream)) {
 				time = 0;
-				vehicles.clear();
-				vehicles = (List<Vehicle>) objectInputStream.readObject();
-				ids = (Set<Integer>) objectInputStream.readObject();
-				times = (Map<Integer, Long>) objectInputStream.readObject();
-				times.clear();
+				h.carCount = 0;
+				h.motoCount = 0;
+				h.vehicles.clear();
+				h.ids.clear();
+				h.times.clear();
+				h.vehicles = (List<Vehicle>) objectInputStream.readObject();
+				h.ids = (Set<Integer>) objectInputStream.readObject();
+				h.times = (Map<Integer, Long>) objectInputStream.readObject();
 
 				boolean isInfoB = inputStream.read() == 1;
 				boolean showTB = inputStream.read() == 1;
@@ -641,40 +635,40 @@ public class MyFrame extends JFrame {
 				hideTimerItem.setSelected(hideTB);
 				timeLabel.setVisible(showTB);
 
-				N1 = inputStream.read();
-				N2 = inputStream.read();
-				P1 = inputStream.read();
-				P2 = inputStream.read();
+				h.N1 = inputStream.read();
+				h.N2 = inputStream.read();
+				h.P1 = inputStream.read();
+				h.P2 = inputStream.read();
 
 				Car.setTimeLifeCar(inputStream.read());
 				Motorbike.setTimeLifeMoto(inputStream.read());
 
-				speed = (float) (inputStream.read() / 10);
+				h.speed = (float) (inputStream.read() / 10);
 				carMoving.setPriority(inputStream.read());
 				motoMoving.setPriority(inputStream.read());
 
-
-				for (Vehicle v : vehicles) {
+				for (int i = 0; i < h.vehicles.size(); i++) {
+					Vehicle v = h.vehicles.get(i);
 					v.setTimeAppear(0);
-					times.put(v.getId(), 0L);
+					h.times.put(v.getId(), 0L);
 					if (v instanceof Car) {
-						carCount++;
+						h.carCount++;
 					} else {
-						motoCount++;
+						h.motoCount++;
 					}
 				}
-				carsFreqText.setText("" + N1);
-				motoFreqText.setText("" + N2);
-				carProbability.setSelectedItem("" + P1 + "%");
-				motoProbability.setSelectedIndex(P2 / 10);
+				carsFreqText.setText("" + h.N1);
+				motoFreqText.setText("" + h.N2);
+				carProbability.setSelectedItem("" + h.P1 + "%");
+				motoProbability.setSelectedIndex(h.P2 / 10);
 				carsTimeText.setText("" + Car.getTimeLifeCar());
 				motoTimeText.setText("" + Motorbike.getTimeLifeMoto());
-				speedSlider.setValue((int) (speed * 10));
+				speedSlider.setValue((int) (h.speed * 10));
 				carPriority.setSelectedItem("" + carMoving.getPriority());
 				motoPriority.setSelectedItem("" + motoMoving.getPriority());
 
 
-				System.out.println(N1 + " " + N2 + " " + P1 + " " + P2 + " " + speed + " " + carMoving.getPriority() + " " +
+				System.out.println(h.N1 + " " + h.N2 + " " + h.P1 + " " + h.P2 + " " + h.speed + " " + carMoving.getPriority() + " " +
 								motoMoving.getPriority() + " ");
 
 			} catch (IOException ex1) {

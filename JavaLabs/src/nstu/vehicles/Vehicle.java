@@ -9,10 +9,6 @@ public abstract class Vehicle implements Serializable {
 	protected long timeAppear;
 	protected ImageIcon image;
 
-	public float getSpeed() {
-		return speed;
-	}
-
 	public float getX() {
 		return x;
 	}

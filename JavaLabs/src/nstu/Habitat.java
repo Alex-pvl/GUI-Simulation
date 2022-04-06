@@ -9,14 +9,13 @@ import java.util.*;
 
 public class Habitat implements Serializable {
 	private final  static long serializedUID = 1;
-
 	public final int WIDTH = 1200;
 	public final int HEIGHT = 750;
 	public static int N1 = 3, N2 = 4;
 	public static int P1 = 60, P2 = 70;
 	public static float speed = 3.5f;
-	public static int carCount = 0;
-	public static int motoCount = 0;
+	public int carCount = 0;
+	public int motoCount = 0;
 	public Random random = new Random();
 
 	public static List<Vehicle> vehicles = new ArrayList<>();

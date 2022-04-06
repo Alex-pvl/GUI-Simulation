@@ -14,10 +14,10 @@ public class Motorbike extends Vehicle implements IBehaviour {
 		this.setImage(new ImageIcon("JavaLabs/src/nstu/imgs/moto.png"));
 		this.setX(x);
 		this.setY(y);
-		int id = new Random().nextInt(2000000000) - 1000000000;
+		int id = new Random().nextInt(2000000000);
 		while (true) {
 			if (Habitat.ids.contains(id)) {
-				id = new Random().nextInt(2000000000) - 1000000000;
+				id = new Random().nextInt(2000000000);
 			} else {
 				break;
 			}
