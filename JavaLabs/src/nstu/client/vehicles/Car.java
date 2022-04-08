@@ -14,10 +14,10 @@ public class Car extends Vehicle implements IBehaviour {
 		this.setImage(new ImageIcon("C:\\Users\\Александр\\Java\\Labs-4-sem\\JavaLabs\\src\\nstu\\client\\imgs\\car.png"));
 		this.setX(x);
 		this.setY(y);
-		int id = new Random().nextInt(2000000000);
+		int id = new Random().nextInt(1000);
 		while (true) {
 			if (Habitat.ids.contains(id)) {
-				id = new Random().nextInt(2000000000);
+				id = new Random().nextInt(1000);
 			} else {
 				break;
 			}

@@ -6,6 +6,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
+import java.sql.*;
 import java.util.*;
 import java.util.List;
 import java.util.Timer;
@@ -68,8 +69,37 @@ public class MyFrame extends JFrame {
 	public JMenuItem networkItem;
 	public NDialog networkDialog;
 
+	public static final String DB_NAME = "vehicles.db";
+	public static final String CONNECTION_STRING = "jdbc:sqlite:C:\\Users\\Александр\\Java\\Labs-4-sem\\JavaLabs\\src\\" + DB_NAME;
+	public static final String VEHICLES_TABLE = "vehicles";
+	public static final String CREATE_VEHICLES_TABLE = "CREATE TABLE IF NOT EXISTS " + VEHICLES_TABLE +
+					"(id INTEGER, type TEXT, x INTEGER, y INTEGER, timeAppear INTEGER)";
+  public Connection con;
+	public Statement statement;
+	public JMenu saveToDB;
+	public JMenuItem saveToDBAllItem;
+	public JMenuItem saveToDBOnlyCarsItem;
+	public JMenuItem saveToDBOnlyMotosItem;
+	public JMenu loadFromDB;
+	public JMenuItem loadFromDBAllItem;
+	public JMenuItem loadFromDBOnlyCarsItem;
+	public JMenuItem loadFromDBOnlyMotosItem;
+
+	public void dropAndCreate() {
+		try {
+			con = DriverManager.getConnection(CONNECTION_STRING);
+			statement = con.createStatement();
+			statement.execute("DROP TABLE IF EXISTS " + VEHICLES_TABLE);
+			statement.execute(CREATE_VEHICLES_TABLE);
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+		}
+	}
+
+
 	public void startSimulation() {
 		if (!isStarted) {
+			dropAndCreate();
 			startCarMoving = false;
 			startMotoMoving = false;
 			carAI.setEnabled(true);
@@ -262,7 +292,11 @@ public class MyFrame extends JFrame {
 		start.setBackground(new Color(0, 255, 119));
 		start.setPreferredSize(new Dimension(138, 30));
 		start.setFont(new Font("JetBrains Mono", Font.BOLD, 16));
-		start.addActionListener(e -> startSimulation());
+		start.addActionListener(e -> {
+			startSimulation();
+
+
+		});
 		start.setFocusable(false);
 		start.setContentAreaFilled(true);
 		panel.add(start);
@@ -711,9 +745,78 @@ public class MyFrame extends JFrame {
 		timerMenu.add(showTimerItem);
 		timerMenu.add(hideTimerItem);
 
+		JMenu dbMenu = new JMenu("БД");
+		saveToDB = new JMenu("Сохранить");
+
+		saveToDBAllItem = new JMenuItem("Все объекты");
+		saveToDBOnlyCarsItem = new JMenuItem("Машины");
+		saveToDBOnlyMotosItem = new JMenuItem("Мотоциклы");
+		saveToDBAllItem.addActionListener(e -> {
+			dropAndCreate();
+			try {
+				for (Vehicle v : vehicles) {
+					statement.execute("INSERT INTO " + VEHICLES_TABLE + " (id, type, x, y, timeAppear) " +
+									"VALUES(" + v.getId() + ", " + "\'" + v.getClass().getName().substring(21) + "\'" + ", " + v.getX() + ", " + v.getY() + ", " + (int) v.getTimeAppear() + ")");
+				}
+			} catch (SQLException ex) {
+				ex.printStackTrace();
+			}
+		});
+		saveToDBOnlyCarsItem.addActionListener(e -> {
+			dropAndCreate();
+			try {
+				for (Vehicle v : vehicles) {
+					if (v instanceof Car) {
+						statement.execute("INSERT INTO " + VEHICLES_TABLE + " (id, type, x, y, timeAppear) " +
+										"VALUES(" + v.getId() + ", " + "\'" + v.getClass().getName().substring(21) + "\'" + ", " + v.getX() + ", " + v.getY() + ", " + (int) v.getTimeAppear() + ")");
+
+					}
+				}
+			} catch (SQLException ex) {
+				ex.printStackTrace();
+			}
+		});
+		saveToDBOnlyMotosItem.addActionListener(e -> {
+			dropAndCreate();
+			try {
+				for (Vehicle v : vehicles) {
+					if (v instanceof Motorbike) {
+						statement.execute("INSERT INTO " + VEHICLES_TABLE + " (id, type, x, y, timeAppear) " +
+										"VALUES(" + v.getId() + ", " + "\'" + v.getClass().getName().substring(21) + "\'" + ", " + v.getX() + ", " + v.getY() + ", " + (int) v.getTimeAppear() + ")");
+
+					}
+				}
+			} catch (SQLException ex) {
+				ex.printStackTrace();
+			}
+		});
+
+		loadFromDB = new JMenu("Загрузить");
+		loadFromDBAllItem = new JMenuItem("Все объекты");
+		loadFromDBOnlyCarsItem = new JMenuItem("Машины");
+		loadFromDBOnlyMotosItem = new JMenuItem("Мотоциклы");
+		loadFromDBAllItem.addActionListener(e -> {
+
+		});
+		loadFromDBOnlyCarsItem.addActionListener(e -> {
+
+		});
+		loadFromDBOnlyMotosItem.addActionListener(e -> {
+
+		});
+
+		dbMenu.add(saveToDB);
+		dbMenu.add(loadFromDB);
+		saveToDB.add(saveToDBAllItem);
+		saveToDB.add(saveToDBOnlyCarsItem);
+		saveToDB.add(saveToDBOnlyMotosItem);
+		loadFromDB.add(loadFromDBAllItem);
+		loadFromDB.add(loadFromDBOnlyCarsItem);
+		loadFromDB.add(loadFromDBOnlyMotosItem);
 		menu.add(fileMenu);
 		menu.add(simulationMenu);
 		menu.add(timerMenu);
+		menu.add(dbMenu);
 
 		setJMenuBar(menu);
 		menu.setFocusable(false);
