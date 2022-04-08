@@ -1,14 +1,11 @@
 package nstu.client;
 
-import nstu.client.vehicles.Car;
-import nstu.client.vehicles.Motorbike;
-import nstu.client.vehicles.Vehicle;
-
+import nstu.client.vehicles.*;
 import java.io.Serializable;
 import java.util.*;
 
 public class Habitat implements Serializable {
-	private final  static long serializedUID = 1;
+	private final static long serializedUID = 1;
 	public final int WIDTH = 1200;
 	public final int HEIGHT = 750;
 	public static int N1 = 3, N2 = 4;
@@ -62,6 +59,9 @@ public class Habitat implements Serializable {
 			System.out.println("+motorbike{" + motorbike.getX() + "; " + motorbike.getY() + "; " + motorbike.getId() + "}");
 			motoCount++;
 		}
+	}
 
+	public static List<Vehicle> getVehicles() {
+		return new ArrayList<>(vehicles);
 	}
 }

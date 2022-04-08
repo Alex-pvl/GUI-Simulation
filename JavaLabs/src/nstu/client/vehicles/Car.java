@@ -3,9 +3,7 @@ package nstu.client.vehicles;
 import nstu.client.Habitat;
 
 import javax.swing.*;
-import java.io.Serializable;
 import java.util.Random;
-import static nstu.client.Habitat.*;
 
 public class Car extends Vehicle implements IBehaviour {
 	private static long timeLifeCar = 20;
@@ -13,7 +11,7 @@ public class Car extends Vehicle implements IBehaviour {
 	private boolean leftBorder = false;
 
 	public Car(int x, int y) {
-		this.setImage(new ImageIcon("JavaLabs/src/nstu/client/imgs/car.png"));
+		this.setImage(new ImageIcon("C:\\Users\\Александр\\Java\\Labs-4-sem\\JavaLabs\\src\\nstu\\client\\imgs\\car.png"));
 		this.setX(x);
 		this.setY(y);
 		int id = new Random().nextInt(2000000000);

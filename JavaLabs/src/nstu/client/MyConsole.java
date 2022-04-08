@@ -23,6 +23,7 @@ public class MyConsole extends JDialog implements Runnable {
 		setLayout(new FlowLayout(FlowLayout.LEFT));
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setSize(500, 420);
+		setBounds(1000, 300, 500, 420);
 		setVisible(false);
 		requestFocus();
 
@@ -56,7 +57,7 @@ public class MyConsole extends JDialog implements Runnable {
 			inputField.setText("");
 		});
 
-		setLocationRelativeTo(null);
+		//setLocationRelativeTo(null);
 		new Thread(this).start();
 	}
 
@@ -71,17 +72,19 @@ public class MyConsole extends JDialog implements Runnable {
 					JOptionPane.showMessageDialog(null, "N = [0; 100]", "Ошибка!", JOptionPane.ERROR_MESSAGE);
 				} else {
 					habitat.motoCount -= habitat.motoCount * prs / 100;
+					outputArea.append(line + "\nmotoCount: " + motoCountPrev + " -> " + habitat.motoCount + "\n");
 					while (motoCountPrev > habitat.motoCount) {
 						for (int i = 0; i < habitat.vehicles.size(); i++) {
 							Vehicle v = habitat.vehicles.get(i);
 							if (v instanceof Motorbike) {
 								habitat.vehicles.remove(i);
+								System.out.println("-motorbike{" + v.getX() + "; " + v.getY() + "; " + v.getId() + "}");
 								break;
 							}
 						}
 						motoCountPrev--;
 					}
-					outputArea.append(line + "\nnstu@road $: ");
+					outputArea.append("nstu@road $: ");
 				}
 			} else {
 				JOptionPane.showMessageDialog(null, "Неверная команда!", "Ошибка!", JOptionPane.ERROR_MESSAGE);

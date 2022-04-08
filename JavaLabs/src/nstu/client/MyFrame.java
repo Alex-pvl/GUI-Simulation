@@ -65,6 +65,9 @@ public class MyFrame extends JFrame {
 	public JButton console;
 	public JDialog consoleDialog;
 
+	public JMenuItem networkItem;
+	public NDialog networkDialog;
+
 	public void startSimulation() {
 		if (!isStarted) {
 			startCarMoving = false;
@@ -202,7 +205,7 @@ public class MyFrame extends JFrame {
 	public MyFrame() {
 		super("Дорога");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setIconImage(new ImageIcon("JavaLabs/src/nstu/client/imgs/icon.png").getImage());
+		setIconImage(new ImageIcon("C:\\Users\\Александр\\Java\\Labs-4-sem\\JavaLabs\\src\\nstu\\client\\imgs\\icon.png").getImage());
 		setBounds(dimension.width / 2 - h.WIDTH / 2, dimension.height / 2 - h.HEIGHT / 2,
 						h.WIDTH, h.HEIGHT);
 		setLayout(new BorderLayout());
@@ -581,7 +584,7 @@ public class MyFrame extends JFrame {
 		loadSimilation.setEnabled(false);
 
 		saveSimilation.addActionListener(e -> {
-			try (FileOutputStream outputStream = new FileOutputStream("JavaLabs/src/nstu/client/config.txt");
+			try (FileOutputStream outputStream = new FileOutputStream("C:\\Users\\Александр\\Java\\Labs-4-sem\\JavaLabs\\src\\nstu\\client\\config.txt");
 					 ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream)) {
 				objectOutputStream.writeObject(h.vehicles);
 				objectOutputStream.writeObject(h.ids);
@@ -612,7 +615,7 @@ public class MyFrame extends JFrame {
 		});
 
 		loadSimilation.addActionListener(e -> {
-			try (FileInputStream inputStream = new FileInputStream("JavaLabs/src/nstu/client/config.txt");
+			try (FileInputStream inputStream = new FileInputStream("C:\\Users\\Александр\\Java\\Labs-4-sem\\JavaLabs\\src\\nstu\\client\\config.txt");
 					 ObjectInputStream objectInputStream = new ObjectInputStream(inputStream)) {
 				time = 0;
 				h.carCount = 0;
@@ -684,13 +687,19 @@ public class MyFrame extends JFrame {
 		JMenu simulationMenu = new JMenu("Симуляция");
 		startItem = new JMenuItem("Старт");
 		stopItem = new JMenuItem("Стоп");
+		networkItem = new JMenuItem("Сеть");
 		showInfoItem = new JCheckBoxMenuItem("Показывать информацию");
 		startItem.addActionListener(e -> startSimulation());
 		stopItem.addActionListener(e -> stopSimulation());
 		stopItem.setEnabled(false);
 		showInfoItem.addActionListener(e -> showInfo.setSelected(showInfoItem.isSelected()));
+		networkItem.addActionListener(e -> {
+			networkDialog = new NDialog(this);
+			networkDialog.setVisible(true);
+		});
 		simulationMenu.add(startItem);
 		simulationMenu.add(stopItem);
+		simulationMenu.add(networkItem);
 		simulationMenu.add(showInfoItem);
 
 		JMenu timerMenu = new JMenu("Таймер");
