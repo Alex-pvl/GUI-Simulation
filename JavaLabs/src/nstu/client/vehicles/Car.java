@@ -26,6 +26,15 @@ public class Car extends Vehicle implements IBehaviour {
 		Habitat.ids.add(id);
 	}
 
+	public Car(int x, int y, int id, int timeAppear) {
+		this.setX(x);
+		this.setY(y);
+		this.setId(id);
+		this.setTimeAppear(timeAppear);
+		this.setImage(new ImageIcon("C:\\Users\\Александр\\Java\\Labs-4-sem\\JavaLabs\\src\\nstu\\client\\imgs\\car.png"));
+		Habitat.ids.add(id);
+	}
+
 	public static long getTimeLifeCar() {
 		return timeLifeCar;
 	}

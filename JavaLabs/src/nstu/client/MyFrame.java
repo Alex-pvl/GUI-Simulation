@@ -19,7 +19,7 @@ public class MyFrame extends JFrame {
 	public boolean willShowTime = false;
 	public boolean isStarted = false;
 	public Habitat h = new Habitat();
-	public long time;
+	public static long time;
 	public Timer timer;
 	public Timer timerRepaint;
 	public JPanel panel;
@@ -76,6 +76,7 @@ public class MyFrame extends JFrame {
 					"(id INTEGER, type TEXT, x INTEGER, y INTEGER, timeAppear INTEGER)";
   public Connection con;
 	public Statement statement;
+	public ResultSet resultSet;
 	public JMenu saveToDB;
 	public JMenuItem saveToDBAllItem;
 	public JMenuItem saveToDBOnlyCarsItem;
@@ -99,7 +100,6 @@ public class MyFrame extends JFrame {
 
 	public void startSimulation() {
 		if (!isStarted) {
-			dropAndCreate();
 			startCarMoving = false;
 			startMotoMoving = false;
 			carAI.setEnabled(true);
@@ -147,7 +147,7 @@ public class MyFrame extends JFrame {
 		dialog = new JOptionPane();
 		JTextArea stats = new JTextArea(
 						"Время симуляции: " + time + " c" +
-										"\nВсего объектов: " + h.vehicles.size() +
+										"\nВсего объектов: " + (h.carCount + h.motoCount) +
 										"\nЧисло машин: " + h.carCount +
 										"\nЧисло мотоциклов: " + h.motoCount
 		);
@@ -756,7 +756,7 @@ public class MyFrame extends JFrame {
 			try {
 				for (Vehicle v : vehicles) {
 					statement.execute("INSERT INTO " + VEHICLES_TABLE + " (id, type, x, y, timeAppear) " +
-									"VALUES(" + v.getId() + ", " + "\'" + v.getClass().getName().substring(21) + "\'" + ", " + v.getX() + ", " + v.getY() + ", " + (int) v.getTimeAppear() + ")");
+									"VALUES(" + v.getId() + ", " + "\'" + v.getClass().getName().substring(21) + "\'" + ", " + (int) v.getX() + ", " + (int) v.getY() + ", " + (int) v.getTimeAppear() + ")");
 				}
 			} catch (SQLException ex) {
 				ex.printStackTrace();
@@ -768,7 +768,7 @@ public class MyFrame extends JFrame {
 				for (Vehicle v : vehicles) {
 					if (v instanceof Car) {
 						statement.execute("INSERT INTO " + VEHICLES_TABLE + " (id, type, x, y, timeAppear) " +
-										"VALUES(" + v.getId() + ", " + "\'" + v.getClass().getName().substring(21) + "\'" + ", " + v.getX() + ", " + v.getY() + ", " + (int) v.getTimeAppear() + ")");
+										"VALUES(" + v.getId() + ", " + "\'" + v.getClass().getName().substring(21) + "\'" + ", " + (int) v.getX() + ", " + (int) v.getY() + ", " + (int) v.getTimeAppear() + ")");
 
 					}
 				}
@@ -782,8 +782,7 @@ public class MyFrame extends JFrame {
 				for (Vehicle v : vehicles) {
 					if (v instanceof Motorbike) {
 						statement.execute("INSERT INTO " + VEHICLES_TABLE + " (id, type, x, y, timeAppear) " +
-										"VALUES(" + v.getId() + ", " + "\'" + v.getClass().getName().substring(21) + "\'" + ", " + v.getX() + ", " + v.getY() + ", " + (int) v.getTimeAppear() + ")");
-
+										"VALUES(" + v.getId() + ", " + "\'" + v.getClass().getName().substring(21) + "\'" + ", " + (int) v.getX() + ", " + (int) v.getY() + ", " + (int) v.getTimeAppear() + ")");
 					}
 				}
 			} catch (SQLException ex) {
@@ -796,13 +795,57 @@ public class MyFrame extends JFrame {
 		loadFromDBOnlyCarsItem = new JMenuItem("Машины");
 		loadFromDBOnlyMotosItem = new JMenuItem("Мотоциклы");
 		loadFromDBAllItem.addActionListener(e -> {
-
+			h.vehicles.clear();
+			try {
+				con = DriverManager.getConnection(CONNECTION_STRING);
+				statement = con.createStatement();
+				resultSet = statement.executeQuery("SELECT id, type, x, y FROM " + VEHICLES_TABLE);
+				while (resultSet.next()) {
+					int id = resultSet.getInt(1);
+					String type = resultSet.getString(2);
+					int x = resultSet.getInt(3);
+					int y = resultSet.getInt(4);
+					if (type.equals("Car")) {
+						h.vehicles.add(new Car(x, y, id, (int) time));
+					} else if (type.equals("Motorbike")) {
+						h.vehicles.add(new Motorbike(x, y, id, (int) time));
+					}
+				}
+			} catch (SQLException ex) {
+				ex.printStackTrace();
+			}
 		});
 		loadFromDBOnlyCarsItem.addActionListener(e -> {
-
+			h.vehicles.clear();
+			try {
+				con = DriverManager.getConnection(CONNECTION_STRING);
+				statement = con.createStatement();
+				resultSet = statement.executeQuery("SELECT id, x, y FROM " + VEHICLES_TABLE + " WHERE type = 'Car'");
+				while (resultSet.next()) {
+					int id = resultSet.getInt(1);
+					int x = resultSet.getInt(2);
+					int y = resultSet.getInt(3);
+					h.vehicles.add(new Car(x, y, id, (int) time));
+				}
+			} catch (SQLException ex) {
+				ex.printStackTrace();
+			}
 		});
 		loadFromDBOnlyMotosItem.addActionListener(e -> {
-
+			h.vehicles.clear();
+			try {
+				con = DriverManager.getConnection(CONNECTION_STRING);
+				statement = con.createStatement();
+				resultSet = statement.executeQuery("SELECT id, x, y FROM " + VEHICLES_TABLE + " WHERE type = 'Motorbike'");
+				while (resultSet.next()) {
+					int id = resultSet.getInt(1);
+					int x = resultSet.getInt(2);
+					int y = resultSet.getInt(3);
+					h.vehicles.add(new Motorbike(x, y, id, (int) time));
+				}
+			} catch (SQLException ex) {
+				ex.printStackTrace();
+			}
 		});
 
 		dbMenu.add(saveToDB);

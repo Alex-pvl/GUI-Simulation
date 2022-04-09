@@ -49,6 +49,7 @@ public class NDialog extends JDialog {
 		JPanel clientsPnl = new JPanel(new BorderLayout());
 		clientsPnl.setBorder(new EmptyBorder(5, 10, 5, 10));
 		clients = new JList<>();
+		clients.setFont(new Font("JetBrains Mono", Font.BOLD, 14));
 		clientsPnl.add(clients);
 		add(clientsPnl);
 

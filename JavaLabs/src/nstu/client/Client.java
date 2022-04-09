@@ -60,6 +60,10 @@ public class Client extends Thread {
 						case "swap1" -> {
 							int idFrom;
 							List<Vehicle> serverArray = (ArrayList<Vehicle>) ois.readObject();
+							for (int i = 0; i < serverArray.size(); i++) {
+								Vehicle v = serverArray.get(i);
+								v.setTimeAppear(MyFrame.time);
+							}
 							idFrom = ois.readInt();
 							List<Vehicle> clientArray = Habitat.getVehicles();
 							oos.writeUTF(StartServer.swapCommand);
@@ -71,6 +75,10 @@ public class Client extends Thread {
 						}
 						case "swap2" -> {
 							List<Vehicle> serverArray = (ArrayList<Vehicle>) ois.readObject();
+							for (int i = 0; i < serverArray.size(); i++) {
+								Vehicle v = serverArray.get(i);
+								v.setTimeAppear(MyFrame.time);
+							}
 							Habitat.vehicles.clear();
 							Habitat.vehicles = new ArrayList<>(serverArray);
 						}

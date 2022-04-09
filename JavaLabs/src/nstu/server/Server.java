@@ -1,5 +1,6 @@
 package nstu.server;
 
+import nstu.client.MyFrame;
 import nstu.client.vehicles.Vehicle;
 
 import java.net.*;
@@ -33,6 +34,10 @@ public class Server extends Thread {
 					case StartServer.connectCommand -> {
 						int idToSwap = ois.readInt();
 						List<Vehicle> vehiclesList1 = (ArrayList<Vehicle>) ois.readObject();
+						for (int i = 0; i < vehiclesList1.size(); i++) {
+							Vehicle v = vehiclesList1.get(i);
+							v.setTimeAppear(MyFrame.time);
+						}
 						StartServer.clients.get(idToSwap).oos.writeUTF("swap1");
 						StartServer.clients.get(idToSwap).oos.writeObject(vehiclesList1);
 						StartServer.clients.get(idToSwap).oos.writeInt(id);
@@ -40,6 +45,10 @@ public class Server extends Thread {
 					}
 					case StartServer.swapCommand -> {
 						List<Vehicle> vehiclesList2 = (ArrayList<Vehicle>) ois.readObject();
+						for (int i = 0; i < vehiclesList2.size(); i++) {
+							Vehicle v = vehiclesList2.get(i);
+							v.setTimeAppear(MyFrame.time);
+						}
 						int idToSwap = ois.readInt();
 						StartServer.clients.get(idToSwap).oos.writeUTF("swap2");
 						StartServer.clients.get(idToSwap).oos.writeObject(vehiclesList2);

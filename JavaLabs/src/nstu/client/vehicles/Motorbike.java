@@ -26,6 +26,15 @@ public class Motorbike extends Vehicle implements IBehaviour {
 		Habitat.ids.add(id);
 	}
 
+	public Motorbike(int x, int y, int id, int timeAppear) {
+		this.setX(x);
+		this.setY(y);
+		this.setId(id);
+		this.setTimeAppear(timeAppear);
+		this.setImage(new ImageIcon("C:\\Users\\Александр\\Java\\Labs-4-sem\\JavaLabs\\src\\nstu\\client\\imgs\\moto.png"));
+		Habitat.ids.add(id);
+	}
+
 	public static long getTimeLifeMoto() {
 		return timeLifeMoto;
 	}
