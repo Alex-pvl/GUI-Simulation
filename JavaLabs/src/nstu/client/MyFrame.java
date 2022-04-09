@@ -796,6 +796,8 @@ public class MyFrame extends JFrame {
 		loadFromDBOnlyMotosItem = new JMenuItem("Мотоциклы");
 		loadFromDBAllItem.addActionListener(e -> {
 			h.vehicles.clear();
+			h.carCount = 0;
+			h.motoCount = 0;
 			try {
 				con = DriverManager.getConnection(CONNECTION_STRING);
 				statement = con.createStatement();
@@ -807,8 +809,10 @@ public class MyFrame extends JFrame {
 					int y = resultSet.getInt(4);
 					if (type.equals("Car")) {
 						h.vehicles.add(new Car(x, y, id, (int) time));
+						h.carCount++;
 					} else if (type.equals("Motorbike")) {
 						h.vehicles.add(new Motorbike(x, y, id, (int) time));
+						h.motoCount++;
 					}
 				}
 			} catch (SQLException ex) {
@@ -817,6 +821,8 @@ public class MyFrame extends JFrame {
 		});
 		loadFromDBOnlyCarsItem.addActionListener(e -> {
 			h.vehicles.clear();
+			h.carCount = 0;
+			h.motoCount = 0;
 			try {
 				con = DriverManager.getConnection(CONNECTION_STRING);
 				statement = con.createStatement();
@@ -826,6 +832,7 @@ public class MyFrame extends JFrame {
 					int x = resultSet.getInt(2);
 					int y = resultSet.getInt(3);
 					h.vehicles.add(new Car(x, y, id, (int) time));
+					h.carCount++;
 				}
 			} catch (SQLException ex) {
 				ex.printStackTrace();
@@ -833,6 +840,8 @@ public class MyFrame extends JFrame {
 		});
 		loadFromDBOnlyMotosItem.addActionListener(e -> {
 			h.vehicles.clear();
+			h.carCount = 0;
+			h.motoCount = 0;
 			try {
 				con = DriverManager.getConnection(CONNECTION_STRING);
 				statement = con.createStatement();
@@ -842,6 +851,7 @@ public class MyFrame extends JFrame {
 					int x = resultSet.getInt(2);
 					int y = resultSet.getInt(3);
 					h.vehicles.add(new Motorbike(x, y, id, (int) time));
+					h.motoCount++;
 				}
 			} catch (SQLException ex) {
 				ex.printStackTrace();
