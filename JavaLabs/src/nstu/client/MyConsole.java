@@ -57,7 +57,6 @@ public class MyConsole extends JDialog implements Runnable {
 			inputField.setText("");
 		});
 
-		//setLocationRelativeTo(null);
 		new Thread(this).start();
 	}
 
