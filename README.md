@@ -1,7 +1,7 @@
 # Labs-4-sem
 ## Лабораторные работы по предмету "Технологии и методы программирования" (Java)
 ### Gui-симуляция, включает работу с:
-#### -Swind+AWT
+#### -Swing+AWT
 #### -Collections
 #### -Multithreading
 #### -IOStreams
